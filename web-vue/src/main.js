@@ -23,6 +23,7 @@ import preview from 'vue-photo-preview'
 import 'vue-photo-preview/dist/skin.css'
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
+import "./assets/css/main.css";
 
 Vue.use(ElementUI);
 require('@jeecg/antd-online-214')

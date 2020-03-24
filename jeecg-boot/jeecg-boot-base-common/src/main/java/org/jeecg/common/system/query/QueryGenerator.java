@@ -15,6 +15,7 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.jeecg.common.constant.CommonConstant;
 import org.jeecg.common.constant.DataBaseConstant;
@@ -75,16 +76,51 @@ public class QueryGenerator {
         return time;
     }
 
+    public static <T> QueryWrapper<T> getSort(QueryWrapper<T> queryWrapper, JSONObject json) {
+        String prop = json.getString("prop");
+        String order = json.getString("order");
+        if (prop != null && prop.length() > 0) {
+            if (order == null) {
+                return queryWrapper;
+            }
+            if ("desc".contains(order)) {
+                queryWrapper.orderBy(true, false, prop);
+            } else if ("asc".contains(order)) {
+                queryWrapper.orderBy(true, true, prop);
+            }
+        }
+        return queryWrapper;
+    }
+
+    public static <T> QueryWrapper<T> andEqual(QueryWrapper<T> queryWrapper, String filed, String jsonKey, JSONObject json) {
+        return andEqual(queryWrapper, filed, json.getString(jsonKey));
+    }
+
+    public static <T> QueryWrapper<T> andEqual(QueryWrapper<T> queryWrapper, String filed, Object value) {
+        if (!StringTools.isNullOrEmpty(value)) {
+            queryWrapper.eq(filed, value);
+        }
+        return queryWrapper;
+    }
+
     public static <T> QueryWrapper<T> andLikeListOr(QueryWrapper<T> queryWrapper, Object keyStr, String... filedList) {
         return andLikeListOr(filedList, queryWrapper, keyStr);
     }
+
 
     public static <T> QueryWrapper<T> andLikeListOr(String[] filedList, QueryWrapper<T> queryWrapper, Object keyStr) {
         if (StringTools.isNullOrEmpty(keyStr) || filedList == null || filedList.length == 0) {
             return queryWrapper;
         }
-        for (String field : filedList) {
-            queryWrapper.like(field, keyStr);
+//        for (String field : filedList) {
+//            queryWrapper.like(field, keyStr).or();
+//        }
+        for (int i = 1; i <= filedList.length; i++) {
+            if (filedList.length != i) {
+                queryWrapper.like(filedList[i - 1], keyStr).or();
+            } else {
+                queryWrapper.like(filedList[i - 1], keyStr);
+            }
         }
         return queryWrapper;
     }
@@ -99,8 +135,16 @@ public class QueryGenerator {
     public static <T> QueryWrapper<T> initQueryWrapper(T searchObj, Map<String, String[]> parameterMap) {
         long start = System.currentTimeMillis();
         QueryWrapper<T> queryWrapper = new QueryWrapper<T>();
-//        andLikeListOr(queryWrapper, "", "");
         installMplus(queryWrapper, searchObj, parameterMap);
+        log.debug("---查询条件构造器初始化完成,耗时:" + (System.currentTimeMillis() - start) + "毫秒----");
+        return queryWrapper;
+    }
+
+    public static <T> QueryWrapper<T> initQueryWrapper(T searchObj, JSONObject jsonObject) {
+        long start = System.currentTimeMillis();
+        QueryWrapper<T> queryWrapper = new QueryWrapper<T>();
+        andLikeListOr(queryWrapper, jsonObject.get("keyStr"), "");
+        installMplus(queryWrapper, searchObj, null);
         log.debug("---查询条件构造器初始化完成,耗时:" + (System.currentTimeMillis() - start) + "毫秒----");
         return queryWrapper;
     }
@@ -115,24 +159,20 @@ public class QueryGenerator {
      * <br>3.也可以不使用这个方法直接调用 {@link #initQueryWrapper}直接获取实例
      */
     public static void installMplus(QueryWrapper<?> queryWrapper, Object searchObj, Map<String, String[]> parameterMap) {
-		
 		/*
 		 * 注意:权限查询由前端配置数据规则 当一个人有多个所属部门时候 可以在规则配置包含条件 orgCode 包含 #{sys_org_code}
 		但是不支持在自定义SQL中写orgCode in #{sys_org_code} 
 		当一个人只有一个部门 就直接配置等于条件: orgCode 等于 #{sys_org_code} 或者配置自定义SQL: orgCode = '#{sys_org_code}'
 		*/
-
         //区间条件组装 模糊查询 高级查询组装 简单排序 权限查询
         PropertyDescriptor origDescriptors[] = PropertyUtils.getPropertyDescriptors(searchObj);
         Map<String, SysPermissionDataRuleModel> ruleMap = getRuleMap();
-
         //权限规则自定义SQL表达式
         for (String c : ruleMap.keySet()) {
             if (oConvertUtils.isNotEmpty(c) && c.startsWith(SQL_RULES_COLUMN)) {
                 queryWrapper.and(i -> i.apply(getSqlRuleValue(ruleMap.get(c).getRuleValue())));
             }
         }
-
         String name, type;
         for (int i = 0; i < origDescriptors.length; i++) {
             //aliasName = origDescriptors[i].getName();  mybatis  不存在实体属性 不用处理别名的情况
@@ -213,7 +253,6 @@ public class QueryGenerator {
             }
             //SQL注入check
             SqlInjectionUtil.filterContent(column);
-
             if (order.toUpperCase().indexOf(ORDER_TYPE_ASC) >= 0) {
                 queryWrapper.orderByAsc(oConvertUtils.camelToUnderline(column));
             } else {
@@ -686,10 +725,6 @@ public class QueryGenerator {
 
     /**
      * 根据权限相关配置生成相关的SQL 语句
-     *
-     * @param searchObj
-     * @param parameterMap
-     * @return
      */
     @SuppressWarnings({"unchecked", "rawtypes"})
     public static String installAuthJdbc(Class<?> clazz) {
@@ -731,8 +766,8 @@ public class QueryGenerator {
     /**
      * 根据权限相关配置 组装mp需要的权限
      *
-     * @param searchObj
-     * @param parameterMap
+     * @param queryWrapper
+     * @param clazz
      * @return
      */
     public static void installAuthMplus(QueryWrapper<?> queryWrapper, Class<?> clazz) {

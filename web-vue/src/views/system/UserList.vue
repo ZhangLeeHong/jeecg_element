@@ -3,62 +3,25 @@
 
     <!-- 查询区域 -->
     <div class="table-page-search-wrapper">
-      <a-form layout="inline" @keyup.enter.native="searchQuery">
-        <a-row :gutter="24">
 
-          <a-col :md="6" :sm="12">
-            <a-form-item label="账号">
-              <fuzzyInput placeholder="输入账号模糊查询" v-model="queryParam.username"
-                          @keyup.enter.native="searchQuery" clearable @clear="searchQuery"/>
-            </a-form-item>
-          </a-col>
+      <el-input placeholder="输入账号、真实姓名或手机号模糊查询" v-model="queryParam.keyStr" clearable @keyup.enter.native="loadData"
+                @clear="loadData" style="width: 260px" size="small"></el-input>
 
-          <a-col :md="6" :sm="8">
-            <a-form-item label="性别">
-              <el-select v-model="queryParam.sex" placeholder="性别" clearable @change="searchQuery"
-                         style="width: 100px">
-                <el-option v-for="(item,key) in  {1:'男性',2:'女性'}" :key="key" :label="item" :value="key"/>
-              </el-select>
-            </a-form-item>
-          </a-col>
+      <el-select v-model="queryParam.sex" placeholder="性别" clearable @change="loadData"
+                 style="width: 100px" @clear="loadData" size="small">
+        <el-option v-for="(item,key) in  {1:'男性',2:'女性'}" :key="key" :label="item" :value="key"/>
+      </el-select>
 
 
-          <template v-if="toggleSearchStatus">
-            <a-col :md="6" :sm="8">
-              <a-form-item label="真实名字">
-                <a-input placeholder="请输入真实名字" v-model="queryParam.realname"></a-input>
-              </a-form-item>
-            </a-col>
+      <el-select v-model="queryParam.status" placeholder="用户状态" clearable @change="loadData"
+                 style="width: 100px" size="small" @clear="loadData">
+        <el-option v-for="(item,key) in  {1:'正常',2:'冻结'}" :key="key" :label="item" :value="key"/>
+      </el-select>
+      <div>
+        <a-button type="primary" @click="loadData" icon="search">查询</a-button>
+        <a-button type="primary" @click="searchReset" icon="reload" style="margin-left: 8px">重置</a-button>
+      </div>
 
-            <a-col :md="6" :sm="8">
-              <a-form-item label="手机号码">
-                <a-input placeholder="请输入手机号码查询" v-model="queryParam.phone"></a-input>
-              </a-form-item>
-            </a-col>
-
-            <a-col :md="6" :sm="8">
-              <a-form-item label="用户状态">
-                <el-select v-model="queryParam.status" placeholder="用户状态" clearable @change="searchQuery"
-                           style="width: 100px">
-                  <el-option v-for="(item,key) in  {1:'正常',2:'冻结'}" :key="key" :label="item" :value="key"/>
-                </el-select>
-              </a-form-item>
-            </a-col>
-          </template>
-
-          <a-col :md="6" :sm="8">
-            <span style="float: left;overflow: hidden;" class="table-page-search-submitButtons">
-              <a-button type="primary" @click="searchQuery" icon="search">查询</a-button>
-              <a-button type="primary" @click="searchReset" icon="reload" style="margin-left: 8px">重置</a-button>
-              <a @click="handleToggleSearch" style="margin-left: 8px">
-                {{ toggleSearchStatus ? '收起' : '展开' }}
-                <a-icon :type="toggleSearchStatus ? 'up' : 'down'"/>
-              </a>
-            </span>
-          </a-col>
-
-        </a-row>
-      </a-form>
     </div>
 
     <!-- 操作按钮区域 -->
@@ -92,13 +55,22 @@
         </a-button>
       </a-dropdown>
     </div>
-    <el-table v-loading="" :data="dataSource" ref="table" border
-              :default-sort="sort={prop: 'createTime', order: 'descending'}">
-      <el-table-column type="index" align="center" width="40"/>
+    <el-table v-loading="loading" :data="dataSource" ref="table" border
+              :default-sort="sort={prop: 'createTime', order: 'descending'}"
+              @sort-change="sortChange"
+              @selection-change="selectionChange" @row-dblclick="rowDblClick">
+      <el-table-column type="index" align="center" width="60"/>
       <el-table-column prop="username" label="用户账号" width="140"/>
       <el-table-column prop="realname" label="用户姓名" width="140"/>
       <el-table-column prop="birthday" label="生日" width="140"/>
-
+      <el-table-column prop="sex" label="性别" width="60" align="center">
+        <template slot-scope="scope">
+          <div v-if="scope.row.sex==1">男</div>
+          <div v-if="scope.row.sex==2">女</div>
+        </template>
+      </el-table-column>
+      <el-table-column prop="phone" label="手机号码" width="140" align="center"/>
+      <el-table-column prop="orgCode" label="部门" width="140" align="center"/>
       <el-table-column prop="createTime" label="创建时间" width="140" align="center" sortable>
         <template slot-scope="scope">
           <span>{{ scope.row.createTime | moment('YYYY-MM-DD HH:mm') }}</span>
@@ -108,7 +80,6 @@
         <template slot-scope="scope">
           <!--<kcButtonEditMini v-if="addEditStatus()" @click="findObj(scope.row.id)">查看</kcButtonEditMini>-->
           <!--<kcButtonEditMini v-else @click="findObj(scope.row.id)">查看</kcButtonEditMini>-->
-          <!--<kcButtonEditMini @click="findObjResult(scope.row.id)">考试详情</kcButtonEditMini>-->
           <!--<kcButtonDelMini v-if="delStatus()" @click="del(scope.row.id)"/>-->
         </template>
       </el-table-column>
@@ -116,7 +87,6 @@
     <pagination :page="ipagination"/>
     <!-- table区域-begin -->
     <div>
-      {{ipagination}}
       <a-table
         ref="table"
         bordered
@@ -135,14 +105,15 @@
           </div>
         </template>
 
-        <span slot="action" slot-scope="text, record">
+        <div slot="action" slot-scope="text, record">
           <a @click="handleEdit(record)">编辑</a>
 
           <a-divider type="vertical"/>
 
           <a-dropdown>
             <a class="ant-dropdown-link">
-              更多 <a-icon type="down"/>
+              更多
+              <a-icon type="down"/>
             </a>
             <a-menu slot="overlay">
               <a-menu-item>
@@ -177,8 +148,7 @@
 
             </a-menu>
           </a-dropdown>
-        </span>
-
+        </div>
 
       </a-table>
     </div>
@@ -199,16 +169,16 @@
 <script>
   import UserModal from './modules/UserModal'
   import PasswordModal from './modules/PasswordModal'
-  import {putAction, getFileAccessHttpUrl,postAction} from '@/api/manage';
+  import {putAction, getFileAccessHttpUrl, postAction} from '@/api/manage';
   import {frozenBatch} from '@/api/api'
-  import {JeecgListMixin} from '@/mixins/JeecgListMixin'
+  import {ListMixin} from '@/mixins/ListMixin'
   import SysUserAgentModal from "./modules/SysUserAgentModal";
   import JInput from '@/components/jeecg/JInput'
   import UserRecycleBinModal from './modules/UserRecycleBinModal'
 
   export default {
     name: "UserList",
-    mixins: [JeecgListMixin],
+    mixins: [ListMixin],
     components: {
       SysUserAgentModal,
       UserModal,
@@ -221,6 +191,8 @@
         description: '这是用户管理页面',
         queryParam: {},
         recycleBinVisible: false,
+        loading: false,
+        sort: {},
         columns: [
           {
             title: '用户账号',
@@ -299,38 +271,15 @@
       }
     },
     mounted() {
-      if (!this.url.list) {
-        this.$message({
-          showClose: true,
-          message: '请设置url.list属性!',
-          type: 'warning'
-        });
-        return
-      }
-      //加载数据 若传入参数1则加载第一页的内容
-      this.ipagination.current = 1;
-      var params = this.getQueryParams();//查询条件
-      this.loading = true;
-      postAction(this.url.list, {pageNo:1,pageSize:10}).then((res) => {
-        if (res.success) {
-          this.dataSource = res.result.records;
-          this.ipagination.total = res.result.total;
-        }
-        if (res.code === 510) {
-          this.$message({
-            showClose: true,
-            message: res.message,
-            type: 'warning'
-          });
-        }
-        this.loading = false;
-      })
     },
     methods: {
-      getAvatarView: function (avatar) {
+      rowDblClick(row) {/*双击行编辑*/
+        this.handleEdit(row)
+      },
+      getAvatarView(avatar) {
         return getFileAccessHttpUrl(avatar, this.url.imgerver, "http")
       },
-      batchFrozen: function (status) {
+      batchFrozen(status) {
         if (this.selectedRowKeys.length <= 0) {
           this.$message.warning('请选择一条记录！');
           return false;
@@ -376,7 +325,7 @@
           this.batchFrozen(1);
         }
       },
-      handleFrozen: function (id, status, username) {
+      handleFrozen(id, status, username) {
         let that = this;
         //TODO 后台校验管理员角色
         if ('admin' == username) {

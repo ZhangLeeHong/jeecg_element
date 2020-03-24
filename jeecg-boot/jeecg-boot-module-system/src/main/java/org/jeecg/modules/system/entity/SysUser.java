@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.jeecg.common.aspect.annotation.Dict;
 import org.jeecgframework.poi.excel.annotation.Excel;
+import org.jeecgframework.poi.excel.annotation.ExcelIgnore;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.baomidou.mybatisplus.annotation.IdType;
@@ -20,12 +21,7 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 /**
- * <p>
- * 用户表
- * </p>
- *
- * @Author scott
- * @since 2018-12-20
+ * 用户
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -67,7 +63,7 @@ public class SysUser implements Serializable {
     /**
      * 头像
      */
-    @Excel(name = "头像", width = 15)
+    @ExcelIgnore
     private String avatar;
 
     /**

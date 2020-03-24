@@ -54,17 +54,13 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * <p>
- * 用户表 前端控制器
- * </p>
- *
- * @Author scott
- * @since 2018-12-20
+ * 用户表
  */
 @Slf4j
 @RestController
 @RequestMapping("/sys/user")
 public class SysUserController {
+
     @Autowired
     private ISysBaseAPI sysBaseAPI;
 
@@ -88,13 +84,18 @@ public class SysUserController {
 
     @RequestMapping(value = "/list", method = RequestMethod.POST)
     public Result<IPage<SysUser>> queryPageList(@RequestBody JSONObject jsonObject) {
-        Result<IPage<SysUser>> result = new Result<IPage<SysUser>>();
-        QueryWrapper<SysUser> queryWrapper = QueryGenerator.initQueryWrapper(new SysUser(), null);
+        JSONObject json = jsonObject.getJSONObject("queryParam");
+        Result<IPage<SysUser>> result = new Result<>();
+        QueryWrapper<SysUser> queryWrapper = QueryGenerator.initQueryWrapper(new SysUser(), (Map<String, String[]>) null);
+        QueryGenerator.andLikeListOr(queryWrapper, json.get("keyStr"), "username", "realname", "phone");
+        QueryGenerator.andEqual(queryWrapper, "sex", "sex", json);
+        QueryGenerator.andEqual(queryWrapper, "status", "status", json);
+        QueryGenerator.getSort(queryWrapper, jsonObject);
         Page<SysUser> page = new Page<>(jsonObject.getInteger("pageNo"), jsonObject.getInteger("pageSize"));
         IPage<SysUser> pageList = sysUserService.page(page, queryWrapper);
         //批量查询用户的所属部门
-        //step.1 先拿到全部的 useids
-        //step.2 通过 useids，一次性查询用户的所属部门名字
+        //step.1 先拿到全部的 userIds
+        //step.2 通过 userIds，一次性查询用户的所属部门名字
         List<String> userIds = pageList.getRecords().stream().map(SysUser::getId).collect(Collectors.toList());
         if (userIds != null && userIds.size() > 0) {
             Map<String, String> useDepNames = sysUserService.getDepNamesByUserIds(userIds);
@@ -381,7 +382,6 @@ public class SysUserController {
      * 导出excel
      *
      * @param request
-     * @param response
      */
     @RequestMapping(value = "/exportXls")
     public ModelAndView exportXls(SysUser sysUser, HttpServletRequest request) {
@@ -847,7 +847,9 @@ public class SysUserController {
     }
 
     /**
-     * @param 根据用户名或手机号查询用户信息
+     * 根据用户名或手机号查询用户信息
+     *
+     * @param
      * @return
      */
     @GetMapping("/querySysUser")

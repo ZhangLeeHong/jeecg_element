@@ -2,6 +2,7 @@ package org.jeecg.modules.system.service.impl;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.annotation.Resource;
@@ -53,7 +54,7 @@ public class SysPermissionDataRuleImpl extends ServiceImpl<SysPermissionDataRule
      */
     @Override
     public List<SysPermissionDataRule> queryPermissionRule(SysPermissionDataRule permRule) {
-        QueryWrapper<SysPermissionDataRule> queryWrapper = QueryGenerator.initQueryWrapper(permRule, null);
+        QueryWrapper<SysPermissionDataRule> queryWrapper = QueryGenerator.initQueryWrapper(permRule, (Map<String, String[]>) null);
         return this.list(queryWrapper);
     }
 
