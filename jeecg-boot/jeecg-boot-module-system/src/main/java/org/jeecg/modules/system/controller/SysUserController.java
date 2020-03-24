@@ -1,6 +1,5 @@
 package org.jeecg.modules.system.controller;
 
-
 import cn.hutool.core.util.RandomUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
@@ -24,10 +23,7 @@ import org.jeecg.common.system.vo.LoginUser;
 import org.jeecg.common.util.PasswordUtil;
 import org.jeecg.common.util.RedisUtil;
 import org.jeecg.common.util.oConvertUtils;
-import org.jeecg.modules.system.entity.SysDepart;
-import org.jeecg.modules.system.entity.SysUser;
-import org.jeecg.modules.system.entity.SysUserDepart;
-import org.jeecg.modules.system.entity.SysUserRole;
+import org.jeecg.modules.system.entity.*;
 import org.jeecg.modules.system.model.DepartIdModel;
 import org.jeecg.modules.system.model.SysUserSysDepartModel;
 import org.jeecg.modules.system.service.ISysDepartService;
@@ -480,13 +476,13 @@ public class SysUserController {
         return sysUserService.resetPassword(username, oldpassword, password, confirmpassword);
     }
 
-    @RequestMapping(value = "/userRoleList", method = RequestMethod.GET)
-    public Result<IPage<SysUser>> userRoleList(@RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo,
-                                               @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize, HttpServletRequest req) {
-        Result<IPage<SysUser>> result = new Result<IPage<SysUser>>();
-        Page<SysUser> page = new Page<SysUser>(pageNo, pageSize);
-        String roleId = req.getParameter("roleId");
-        String username = req.getParameter("username");
+    @RequestMapping(value = "/userRoleList", method = RequestMethod.POST)
+    public Result<IPage<SysUser>> userRoleList(@RequestBody JSONObject jsonObject) {
+        JSONObject json = jsonObject.getJSONObject("queryParam");
+        Result<IPage<SysUser>> result = new Result<>();
+        Page<SysUser> page = new Page<>(jsonObject.getInteger("pageNo"), jsonObject.getInteger("pageSize"));
+        String roleId = jsonObject.getString("roleId");
+        String username = json.getString("username");
         IPage<SysUser> pageList = sysUserService.getUserByRoleId(page, roleId, username);
         result.setSuccess(true);
         result.setResult(pageList);

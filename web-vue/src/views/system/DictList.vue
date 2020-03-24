@@ -3,60 +3,56 @@
 
     <!-- 左侧面板 -->
     <div class="table-page-search-wrapper">
-      <a-form layout="inline" @keyup.enter.native="searchQuery">
-        <a-row :gutter="12">
-          <a-col :md="7" :sm="8">
-            <a-form-item label="字典名称" :labelCol="{span: 6}" :wrapperCol="{span: 14, offset: 1}">
-              <a-input placeholder="请输入字典名称" v-model="queryParam.dictName"></a-input>
-            </a-form-item>
-          </a-col>
-          <a-col :md="7" :sm="8">
-            <a-form-item label="字典编号" :labelCol="{span: 6}" :wrapperCol="{span: 14, offset: 1}">
-              <a-input placeholder="请输入字典编号" v-model="queryParam.dictCode"></a-input>
-            </a-form-item>
-          </a-col>
-          <a-col :md="7" :sm="8">
-            <span style="float: left;overflow: hidden;" class="table-page-search-submitButtons">
-              <a-button type="primary" @click="searchQuery" icon="search">查询</a-button>
-              <a-button type="primary" @click="searchReset" icon="reload" style="margin-left: 8px">重置</a-button>
-            </span>
-          </a-col>
-        </a-row>
-      </a-form>
+      <el-input placeholder="输入字典名称、字典编号查询" v-model="queryParam.keyStr" clearable @keyup.enter.native="loadData"
+                @clear="loadData" style="width: 280px" size="small"/>
+      <a-button type="primary" @click="loadData" icon="search">查询</a-button>
+      <a-button type="primary" @click="searchReset" icon="reload" style="margin-left: 8px">重置</a-button>
 
       <div class="table-operator" style="border-top: 5px">
         <a-button @click="handleAdd" type="primary" icon="plus">添加</a-button>
         <a-button type="primary" icon="download" @click="handleExportXls('字典信息')">导出</a-button>
-        <a-upload name="file" :showUploadList="false" :multiple="false" :headers="tokenHeader" :action="importExcelUrl" @change="handleImportExcel">
+        <a-upload name="file" :showUploadList="false" :multiple="false" :headers="tokenHeader" :action="importExcelUrl"
+                  @change="handleImportExcel">
           <a-button type="primary" icon="import">导入</a-button>
         </a-upload>
         <a-button type="primary" icon="sync" @click="refleshCache()">刷新缓存</a-button>
 
         <a-button type="primary" icon="hdd" @click="openDeleteList">回收站</a-button>
       </div>
-
-      <a-table
-        ref="table"
-        rowKey="id"
-        size="middle"
-        :columns="columns"
-        :dataSource="dataSource"
-        :pagination="ipagination"
-        :loading="loading"
-        @change="handleTableChange">
-        <span slot="action" slot-scope="text, record">
-          <a @click="handleEdit(record)">
-            <a-icon type="edit"/>
-            编辑
-          </a>
-          <a-divider type="vertical"/>
-          <a @click="editDictItem(record)"><a-icon type="setting"/> 字典配置</a>
-          <a-divider type="vertical"/>
-          <a-popconfirm title="确定删除吗?" @confirm="() =>handleDelete(record.id)">
-            <a>删除</a>
-          </a-popconfirm>
-        </span>
-      </a-table>
+      <div class="mainArea">
+        <el-table v-loading="loading" :data="dataSource" ref="table" border
+                  :default-sort="sort={prop: 'createTime', order: 'descending'}"
+                  @sort-change="sortChange" :height="getHeight(340)"
+                  @selection-change="selectionChange" @row-dblclick="rowDblClick">
+          <el-table-column type="index" align="center" width="60"/>
+          <el-table-column prop="dictName" label="字典名称" width="160"/>
+          <el-table-column prop="dictCode" label="字典编号" width="160"/>
+          <el-table-column prop="description" label="描述" width="160"/>
+          <el-table-column prop="createTime" label="创建时间" width="140" align="center" sortable>
+            <template slot-scope="scope">
+              <span>{{ scope.row.createTime | moment('YYYY-MM-DD HH:mm') }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="操作" width="220" align="left" fixed="right">
+            <template slot-scope="scope">
+              <a @click="handleEdit(scope.row)">
+                <a-icon type="edit"/>
+                编辑
+              </a>
+              <a-divider type="vertical"/>
+              <a @click="editDictItem(scope.row)">
+                <a-icon type="setting"/>
+                字典配置
+              </a>
+              <a-divider type="vertical"/>
+              <a-popconfirm title="确定删除吗?" @confirm="() =>handleDelete(scope.row.id)">
+                <a>删除</a>
+              </a-popconfirm>
+            </template>
+          </el-table-column>
+        </el-table>
+        <pagination :page="ipagination" @refresh="refresh" @setVal="setVal"/>
+      </div>
 
     </div>
     <dict-modal ref="modalForm" @ok="modalFormOk"></dict-modal>  <!-- 字典类型 -->
@@ -66,26 +62,23 @@
 </template>
 
 <script>
-  import { filterObj } from '@/utils/util';
-  import { JeecgListMixin } from '@/mixins/JeecgListMixin'
+  import {filterObj} from '@/utils/util';
+  import {ListMixin} from '@/mixins/ListMixin'
   import DictModal from './modules/DictModal'
   import DictItemList from './DictItemList'
   import DictDeleteList from './DictDeleteList'
-  import { getAction } from '@/api/manage'
+  import {getAction} from '@/api/manage'
 
   export default {
     name: "DictList",
-    mixins:[JeecgListMixin],
-    components: {DictModal, DictItemList,DictDeleteList},
+    mixins: [ListMixin],
+    components: {DictModal, DictItemList, DictDeleteList},
     data() {
       return {
         description: '这是数据字典页面',
         visible: false,
         // 查询条件
-        queryParam: {
-          dictCode: "",
-          dictName: "",
-        },
+        queryParam: {},
         // 表头
         columns: [
           {
@@ -121,14 +114,6 @@
           }
         ],
         dict: "",
-        labelCol: {
-          xs: {span: 8},
-          sm: {span: 5},
-        },
-        wrapperCol: {
-          xs: {span: 16},
-          sm: {span: 19},
-        },
         url: {
           list: "/sys/dict/list",
           delete: "/sys/dict/delete",
@@ -144,6 +129,9 @@
       }
     },
     methods: {
+      rowDblClick(row) {/*双击行编辑*/
+        this.handleEdit(row)
+      },
       getQueryParams() {
         var param = Object.assign({}, this.queryParam, this.isorter);
         param.field = this.getQueryField();
@@ -168,17 +156,17 @@
         that.queryParam.dictCode = "";
         that.loadData(this.ipagination.current);
       },
-      openDeleteList(){
+      openDeleteList() {
         this.$refs.dictDeleteList.show()
       },
-      refleshCache(){
+      refleshCache() {
         getAction(this.url.refleshCache).then((res) => {
           if (res.success) {
             this.$message.success("刷新缓存完成！");
           }
-        }).catch(e=>{
+        }).catch(e => {
           this.$message.warn("刷新缓存失败！");
-          console.log("刷新失败",e)
+          console.log("刷新失败", e)
         })
       }
     },
@@ -189,6 +177,3 @@
     },
   }
 </script>
-<style scoped>
-  @import '~@assets/less/common.less'
-</style>

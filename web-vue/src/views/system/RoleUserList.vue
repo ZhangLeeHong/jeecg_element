@@ -67,7 +67,8 @@
       <el-card>
         <!-- 查询区域 -->
         <div class="table-page-search-wrapper">
-          <a-input placeholder="" v-model="queryParam2.username" style="width: 200px"></a-input>
+          <el-input placeholder="请输入用户名称模糊查询" v-model="queryParam2.username" clearable @keyup.enter.native="searchQuery2"
+                    @clear="loadData" style="width: 180px" size="small"></el-input>
           <a-button type="primary" @click="searchQuery2" icon="search" style="margin-left: 21px">查询</a-button>
           <a-button type="primary" @click="searchReset2" icon="reload" style="margin-left: 8px">重置</a-button>
         </div>
@@ -111,7 +112,7 @@
         <!-- 表单区域 -->
         <role-modal ref="modalForm" @ok="modalFormOk"></role-modal>
         <user-modal ref="modalForm2" @ok="modalFormOk2"></user-modal>
-        <Select-User-Modal ref="selectUserModal" @selectFinished="selectOK"></Select-User-Modal>
+        <Select-User-Modal ref="selectUserModal" @selectFinished="selectOK"/>
       </el-card>
     </el-col>
   </el-row>
@@ -148,7 +149,7 @@
         dataSource2: [],
         ipagination1: {
           current: 1,
-          pageSize: 10,
+          pageSize: 20,
           pageSizeOptions: ['10', '20', '30'],
           showTotal: (total, range) => {
             return range[0] + '-' + range[1] + ' 共' + total + '条'
@@ -159,7 +160,8 @@
         },
         ipagination2: {
           current: 1,
-          pageSize: 10,
+          pageSize: 20,
+          pageNo: 1,
           pageSizeOptions: ['10', '20', '30'],
           showTotal: (total, range) => {
             return range[0] + '-' + range[1] + ' 共' + total + '条'
@@ -240,8 +242,6 @@
             align: 'center',
             width: 120
           }],
-
-
         url: {
           list: '/sys/role/list',
           delete: '/sys/role/delete',
@@ -265,8 +265,8 @@
         return this.selectedRowKeys1.length === 0 ? 0 : 12
       }
     },
-    mounted() {
-      this.loadData2(1);
+    created() {
+      this.loadData2()
     },
     methods: {
       onSelectChange2(selectedRowKeys, selectionRows) {
@@ -291,19 +291,6 @@
         this.loadData2()
       },
       onClearSelected() {
-      },
-
-      getQueryParams2() {
-        //获取查询条件
-        let sqp = {}
-        if (this.superQueryParams2) {
-          sqp['superQueryParams'] = encodeURI(this.superQueryParams2)
-        }
-        var param = Object.assign(sqp, this.queryParam2, this.isorter2, this.filters2)
-        param.field = this.getQueryField2()
-        param.pageNo = this.ipagination2.current
-        param.pageSize = this.ipagination2.pageSize
-        return filterObj(param)
       },
       getQueryField2() {
         //TODO 字段权限控制
@@ -331,7 +318,6 @@
         }
       },
       modalFormOk2() {
-        // 新增/修改 成功时，重载列表
         this.loadData2()
       },
       loadData2(arg) {
@@ -343,19 +329,19 @@
         if (arg === 1) {
           this.ipagination2.current = 1
         }
-        if (this.currentRoleId === '') return
-        let params = this.getQueryParams2()//查询条件
-        params.roleId = this.currentRoleId
+        let obj = {}
+        obj.pageNo = this.ipagination2.pageNo
+        obj.pageSize = this.ipagination2.pageSize;
+        obj.queryParam = this.queryParam2;
+        obj.roleId = this.currentRoleId;
         this.loading2 = true
-        getAction(this.url.list2, params).then((res) => {
+        postAction(this.url.list2, obj).then((res) => {
           if (res.success) {
             this.dataSource2 = res.result.records
             this.ipagination2.total = res.result.total
-
           }
           this.loading2 = false
         })
-
       },
       handleDelete1: function (id) {
         this.handleDelete(id)
@@ -377,8 +363,7 @@
           }
         })
       },
-      batchDel2: function () {
-
+      batchDel2() {
         if (!this.url.deleteBatch2) {
           this.$message.error('请设置url.deleteBatch2属性!')
           return
@@ -427,7 +412,6 @@
           }
         })
       },
-
       handleAddUserRole() {
         if (this.currentRoleId == '') {
           this.$message.error('请选择一个角色!')
@@ -448,6 +432,7 @@
       },
       searchReset2() {
         this.queryParam2 = {}
+        this.currentRoleId = null;
         this.loadData2(1)
       },
       handleTableChange2(pagination, filters, sorter) {

@@ -46,9 +46,8 @@
             and id in (select user_id from sys_user_role where role_id=#{roleId})
         </if>
         <if test="username!=null and username!=''">
-            and username = #{username}
+            and username like CONCAT("%",#{username},"%")
         </if>
-
     </select>
 
     <!--  修改用户部门code -->

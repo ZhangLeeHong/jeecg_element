@@ -21,7 +21,7 @@
     props: {
       title: {
         type: String,
-        default: 'Jeecg-Boot Pro',
+        default: 'ZhangLeeHong',
         required: false
       },
       showTitle: {

@@ -5,7 +5,7 @@
     <div class="table-page-search-wrapper">
 
       <el-input placeholder="输入账号、真实姓名或手机号模糊查询" v-model="queryParam.keyStr" clearable @keyup.enter.native="loadData"
-                @clear="loadData" style="width: 280px" size="small"></el-input>
+                @clear="loadData" style="width: 280px" size="small"/>
 
       <el-select v-model="queryParam.sex" placeholder="性别" clearable @change="loadData"
                  style="width: 100px" @clear="loadData" size="small">

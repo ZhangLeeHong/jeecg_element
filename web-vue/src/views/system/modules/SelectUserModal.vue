@@ -17,7 +17,7 @@
 
             <a-col :span="10">
               <a-form-item label="用户账号">
-                <a-input placeholder="请输入用户账号" v-model="queryParam.username"></a-input>
+                <a-input placeholder="请输入用户账号" v-model="queryParam.keyStr"></a-input>
               </a-form-item>
             </a-col>
             <a-col :span="8">
@@ -55,7 +55,7 @@
 
 <script>
   import {filterObj} from '@/utils/util'
-  import {getAction} from '@/api/manage'
+  import {getAction,postAction} from '@/api/manage'
 
   export default {
     name: "SelectUserModal",
@@ -137,7 +137,8 @@
         // 分页参数
         ipagination: {
           current: 1,
-          pageSize: 10,
+          pageSize: 20,
+          pageNo: 1,
           pageSizeOptions: ['10', '20', '30'],
           showTotal: (total, range) => {
             return range[0] + "-" + range[1] + " 共" + total + "条"
@@ -186,8 +187,11 @@
         if (arg === 1) {
           this.ipagination.current = 1;
         }
-        var params = this.getQueryParams();//查询条件
-        getAction(this.url.list, params).then((res) => {
+        let obj = {}
+        obj.pageNo = this.ipagination.pageNo
+        obj.pageSize = this.ipagination.pageSize;
+        obj.queryParam = this.queryParam;
+        postAction(this.url.list, obj).then((res) => {
           if (res.success) {
             this.dataSource1 = res.result.records;
             this.ipagination.total = res.result.total;

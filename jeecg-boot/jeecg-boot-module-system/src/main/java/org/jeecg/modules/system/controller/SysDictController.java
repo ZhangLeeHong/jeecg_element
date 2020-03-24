@@ -72,17 +72,15 @@ public class SysDictController {
     @Autowired
     public RedisTemplate<String, Object> redisTemplate;
 
-    @RequestMapping(value = "/list", method = RequestMethod.GET)
-    public Result<IPage<SysDict>> queryPageList(SysDict sysDict, @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo,
-                                                @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize, HttpServletRequest req) {
-        Result<IPage<SysDict>> result = new Result<IPage<SysDict>>();
-        QueryWrapper<SysDict> queryWrapper = QueryGenerator.initQueryWrapper(sysDict, req.getParameterMap());
-        Page<SysDict> page = new Page<SysDict>(pageNo, pageSize);
+    @RequestMapping(value = "/list", method = RequestMethod.POST)
+    public Result<IPage<SysDict>> queryPageList(@RequestBody JSONObject jsonObject) {
+        JSONObject json = jsonObject.getJSONObject("queryParam");
+        Result<IPage<SysDict>> result = new Result<>();
+        QueryWrapper<SysDict> queryWrapper = QueryGenerator.initQueryWrapper(new SysDict(), (Map<String, String[]>) null);
+        QueryGenerator.andLikeListOr(queryWrapper, json.get("keyStr"), "dict_name", "dict_code");
+        QueryGenerator.getSort(queryWrapper, jsonObject);
+        Page<SysDict> page = new Page<>(jsonObject.getInteger("pageNo"), jsonObject.getInteger("pageSize"));
         IPage<SysDict> pageList = sysDictService.page(page, queryWrapper);
-        log.debug("查询当前页：" + pageList.getCurrent());
-        log.debug("查询当前页数量：" + pageList.getSize());
-        log.debug("查询结果数量：" + pageList.getRecords().size());
-        log.debug("数据总数：" + pageList.getTotal());
         result.setSuccess(true);
         result.setResult(pageList);
         return result;
