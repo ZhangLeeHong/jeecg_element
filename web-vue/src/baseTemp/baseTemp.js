@@ -1,9 +1,31 @@
+import index from "./baseTools/index"
 import Pagination from './Pagination'
 
 //input
 import fuzzyInput from './input/fuzzyInput'
 
+//button
+import buttonAdd from "./button/buttonAdd"
+import buttonDel from "./button/buttonDel"
+import buttonDelMini from "./button/buttonDelMini"
+import buttonEditMini from "./button/buttonEditMini"
+import buttonFind from "./button/buttonFind"
+import buttonFindMini from "./button/buttonFindMini"
+import buttonRefresh from "./button/buttonRefresh"
+
 export default (Vue) => {
-    Vue.component("Pagination", Pagination);
-    Vue.component("fuzzyInput", fuzzyInput);
+  //分页
+  Vue.component("Pagination", Pagination);
+  //input
+  Vue.component("fuzzyInput", fuzzyInput);
+  //button
+  Vue.component("buttonRefresh", buttonRefresh);
+  Vue.component("buttonAdd", buttonAdd);
+  Vue.component("buttonDel", buttonDel);
+  Vue.component("buttonDelMini", buttonDelMini);
+  Vue.component("buttonEditMini", buttonEditMini);
+  Vue.component("buttonFind", buttonFind);
+  Vue.component("buttonRefresh", buttonRefresh);
+  Vue.component("buttonFindMini", buttonFindMini);
+
 }

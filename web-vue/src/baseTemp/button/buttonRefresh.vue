@@ -1,8 +1,8 @@
 <script>
-  import kcButton from './kcButton.vue'
+  import button from './button.vue'
 
   export default {
-    extends: kcButton,
+    extends: button,
     props: {
       icon: {default: "small iconfont-refresh3"},
       type: {default: "success"},

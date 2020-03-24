@@ -11,6 +11,7 @@ import {ACCESS_TOKEN} from "@/store/mutation-types"
 export const ListMixin = {
   data() {
     return {
+      tHeight: 202,
       selectionVal: [],
       sort: {},
       //token header
@@ -22,7 +23,8 @@ export const ListMixin = {
       /* 分页参数 */
       ipagination: {
         current: 1,
-        pageSize: 10,
+        pageNo: 1,
+        pageSize: 20,
         pageSizeOptions: ['10', '20', '30'],
         showTotal: (total, range) => {
           return range[0] + "-" + range[1] + " 共" + total + "条"
@@ -61,6 +63,9 @@ export const ListMixin = {
     }
   },
   methods: {
+    setVal(...vals) {
+      this.baseSetVal(vals);
+    },
     refresh() {/*刷新*/
       this.loadData();
     },
@@ -100,7 +105,9 @@ export const ListMixin = {
         this.ipagination.current = 1;
       }
       this.loading = true;
-      let obj = {pageNo: 1, pageSize: 10}
+      let obj = {}
+      obj.pageNo = this.ipagination.pageNo
+      obj.pageSize = this.ipagination.pageSize;
       obj.queryParam = this.queryParam;
       obj.prop = this.sort.prop;
       obj.order = this.sort.order;

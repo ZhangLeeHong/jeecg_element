@@ -1,8 +1,8 @@
 <script>
-  import kcButtonMini from './kcButtonMini.vue'
+  import buttonMini from './buttonMini.vue'
 
   export default {
-    extends: kcButtonMini,
+    extends: buttonMini,
     props: {
       type: {default: "primary"},
       title: {default: "编辑"},

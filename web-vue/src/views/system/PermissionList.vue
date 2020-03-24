@@ -16,12 +16,6 @@
     <!-- table区域-begin -->
     <div>
 
-      <div class="ant-alert ant-alert-info" style="margin-bottom: 16px;">
-        <i class="anticon anticon-info-circle ant-alert-icon"></i>已选择&nbsp;<a style="font-weight: 600">{{
-        selectedRowKeys.length }}</a>项&nbsp;&nbsp;
-        <a style="margin-left: 24px" @click="onClearSelected">清空</a>
-      </div>
-
       <a-table
         :columns="columns"
         size="middle"
@@ -80,8 +74,8 @@
 
 <script>
   import PermissionModal from './modules/PermissionModal'
-  import { getPermissionList } from '@/api/api'
-  import { JeecgListMixin } from '@/mixins/JeecgListMixin'
+  import {getPermissionList} from '@/api/api'
+  import {JeecgListMixin} from '@/mixins/JeecgListMixin'
   import PermissionDataRuleList from './PermissionDataRuleList'
   import JEllipsis from '@/components/jeecg/JEllipsis'
 
@@ -94,7 +88,7 @@
       title: '菜单类型',
       dataIndex: 'menuType',
       key: 'menuType',
-      customRender: function(text) {
+      customRender: function (text) {
         if (text == 0) {
           return '菜单'
         } else if (text == 1) {
@@ -105,11 +99,8 @@
           return text
         }
       }
-    },/*{
-      title: '权限编码',
-      dataIndex: 'perms',
-      key: 'permissionCode',
-    },*/{
+    },
+    {
       title: 'icon',
       dataIndex: 'icon',
       key: 'icon'
@@ -118,13 +109,13 @@
       title: '组件',
       dataIndex: 'component',
       key: 'component',
-      scopedSlots: { customRender: 'component' }
+      scopedSlots: {customRender: 'component'}
     },
     {
       title: '路径',
       dataIndex: 'url',
       key: 'url',
-      scopedSlots: { customRender: 'url' }
+      scopedSlots: {customRender: 'url'}
     },
     {
       title: '排序',
@@ -134,7 +125,7 @@
     {
       title: '操作',
       dataIndex: 'action',
-      scopedSlots: { customRender: 'action' },
+      scopedSlots: {customRender: 'action'},
       align: 'center',
       width: 150
     }
@@ -181,7 +172,7 @@
         this.$refs.modalForm.title = "添加子菜单";
         this.$refs.modalForm.localMenuType = 1;
         this.$refs.modalForm.disableSubmit = false;
-        this.$refs.modalForm.edit({status:'1',permsType:'1',route:true,'parentId':record.id});
+        this.$refs.modalForm.edit({status: '1', permsType: '1', route: true, 'parentId': record.id});
       },
       handleExpandedRowsChange(expandedRows) {
         this.expandedRowKeys = expandedRows

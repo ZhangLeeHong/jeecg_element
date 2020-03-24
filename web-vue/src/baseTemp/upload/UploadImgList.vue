@@ -121,7 +121,7 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
-    background-image: url('../../../assets/img/img_load_erro.png');
+    background-image: url("../../assets/img/img_load_erro.png");
     background-size: cover;
     background-color: #fff;
   }

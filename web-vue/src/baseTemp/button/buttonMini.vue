@@ -1,8 +1,8 @@
 <script>
-  import kcButton from './kcButton.vue'
+  import button from './button.vue'
 
   export default {
-    extends: kcButton,
+    extends: button,
     props: {
       size: {default: "mini"},
       icon: {default: "small"},

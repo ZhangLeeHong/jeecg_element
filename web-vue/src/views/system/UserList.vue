@@ -5,7 +5,7 @@
     <div class="table-page-search-wrapper">
 
       <el-input placeholder="输入账号、真实姓名或手机号模糊查询" v-model="queryParam.keyStr" clearable @keyup.enter.native="loadData"
-                @clear="loadData" style="width: 260px" size="small"></el-input>
+                @clear="loadData" style="width: 280px" size="small"></el-input>
 
       <el-select v-model="queryParam.sex" placeholder="性别" clearable @change="loadData"
                  style="width: 100px" @clear="loadData" size="small">
@@ -17,10 +17,8 @@
                  style="width: 100px" size="small" @clear="loadData">
         <el-option v-for="(item,key) in  {1:'正常',2:'冻结'}" :key="key" :label="item" :value="key"/>
       </el-select>
-      <div>
-        <a-button type="primary" @click="loadData" icon="search">查询</a-button>
-        <a-button type="primary" @click="searchReset" icon="reload" style="margin-left: 8px">重置</a-button>
-      </div>
+      <a-button type="primary" @click="loadData" icon="search">查询</a-button>
+      <a-button type="primary" @click="searchReset" icon="reload" style="margin-left: 8px">重置</a-button>
 
     </div>
 
@@ -55,105 +53,76 @@
         </a-button>
       </a-dropdown>
     </div>
-    <el-table v-loading="loading" :data="dataSource" ref="table" border
-              :default-sort="sort={prop: 'createTime', order: 'descending'}"
-              @sort-change="sortChange"
-              @selection-change="selectionChange" @row-dblclick="rowDblClick">
-      <el-table-column type="index" align="center" width="60"/>
-      <el-table-column prop="username" label="用户账号" width="140"/>
-      <el-table-column prop="realname" label="用户姓名" width="140"/>
-      <el-table-column prop="birthday" label="生日" width="140"/>
-      <el-table-column prop="sex" label="性别" width="60" align="center">
-        <template slot-scope="scope">
-          <div v-if="scope.row.sex==1">男</div>
-          <div v-if="scope.row.sex==2">女</div>
-        </template>
-      </el-table-column>
-      <el-table-column prop="phone" label="手机号码" width="140" align="center"/>
-      <el-table-column prop="orgCode" label="部门" width="140" align="center"/>
-      <el-table-column prop="createTime" label="创建时间" width="140" align="center" sortable>
-        <template slot-scope="scope">
-          <span>{{ scope.row.createTime | moment('YYYY-MM-DD HH:mm') }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="操作" width="160" align="left" fixed="right">
-        <template slot-scope="scope">
-          <!--<kcButtonEditMini v-if="addEditStatus()" @click="findObj(scope.row.id)">查看</kcButtonEditMini>-->
-          <!--<kcButtonEditMini v-else @click="findObj(scope.row.id)">查看</kcButtonEditMini>-->
-          <!--<kcButtonDelMini v-if="delStatus()" @click="del(scope.row.id)"/>-->
-        </template>
-      </el-table-column>
-    </el-table>
-    <pagination :page="ipagination"/>
-    <!-- table区域-begin -->
-    <div>
-      <a-table
-        ref="table"
-        bordered
-        size="middle"
-        rowKey="id"
-        :columns="columns"
-        :dataSource="dataSource"
-        :pagination="ipagination"
-        :loading="loading"
-        :rowSelection="{selectedRowKeys: selectedRowKeys, onChange: onSelectChange}"
-        @change="handleTableChange">
+    <div class="mainArea">
+      <el-table v-loading="loading" :data="dataSource" ref="table" border
+                :default-sort="sort={prop: 'createTime', order: 'descending'}"
+                @sort-change="sortChange" :height="getHeight(tHeight)"
+                @selection-change="selectionChange" @row-dblclick="rowDblClick">
+        <el-table-column type="index" align="center" width="60"/>
+        <el-table-column prop="username" label="用户账号" width="140"/>
+        <el-table-column prop="realname" label="用户姓名" width="140"/>
+        <el-table-column prop="birthday" label="生日" width="140"/>
+        <el-table-column prop="sex" label="性别" width="60" align="center">
+          <template slot-scope="scope">
+            <div v-if="scope.row.sex==1">男</div>
+            <div v-if="scope.row.sex==2">女</div>
+          </template>
+        </el-table-column>
+        <el-table-column prop="phone" label="手机号码" width="140" align="center"/>
+        <el-table-column prop="orgCode" label="部门" width="140" align="center"/>
+        <el-table-column prop="createTime" label="创建时间" width="140" align="center" sortable>
+          <template slot-scope="scope">
+            <span>{{ scope.row.createTime | moment('YYYY-MM-DD HH:mm') }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="操作" width="160" align="left" fixed="right">
+          <template slot-scope="scope">
+            <buttonEditMini @click="handleEdit(scope.row)">查看</buttonEditMini>
+            <a-divider type="vertical"/>
 
-        <template slot="avatarslot" slot-scope="text, record, index">
-          <div class="anty-img-wrap">
-            <a-avatar shape="square" :src="getAvatarView(record.avatar)" icon="user"/>
-          </div>
-        </template>
+            <a-dropdown>
+              <a class="ant-dropdown-link">
+                更多
+                <a-icon type="down"/>
+              </a>
+              <a-menu slot="overlay">
+                <a-menu-item>
+                  <a href="javascript:;" @click="handleDetail(scope.row)">详情</a>
+                </a-menu-item>
 
-        <div slot="action" slot-scope="text, record">
-          <a @click="handleEdit(record)">编辑</a>
+                <a-menu-item>
+                  <a href="javascript:;" @click="handleChangePassword(scope.row.username)">密码</a>
+                </a-menu-item>
 
-          <a-divider type="vertical"/>
+                <a-menu-item>
+                  <a-popconfirm title="确定删除吗?" @confirm="() => handleDelete(scope.row.id)">
+                    <a>删除</a>
+                  </a-popconfirm>
+                </a-menu-item>
 
-          <a-dropdown>
-            <a class="ant-dropdown-link">
-              更多
-              <a-icon type="down"/>
-            </a>
-            <a-menu slot="overlay">
-              <a-menu-item>
-                <a href="javascript:;" @click="handleDetail(record)">详情</a>
-              </a-menu-item>
+                <a-menu-item v-if="scope.row.status==1">
+                  <a-popconfirm title="确定冻结吗?" @confirm="() => handleFrozen(scope.row.id,2,scope.row.username)">
+                    <a>冻结</a>
+                  </a-popconfirm>
+                </a-menu-item>
 
-              <a-menu-item>
-                <a href="javascript:;" @click="handleChangePassword(record.username)">密码</a>
-              </a-menu-item>
+                <a-menu-item v-if="scope.row.status==2">
+                  <a-popconfirm title="确定解冻吗?" @confirm="() => handleFrozen(scope.row.id,1,scope.row.username)">
+                    <a>解冻</a>
+                  </a-popconfirm>
+                </a-menu-item>
 
-              <a-menu-item>
-                <a-popconfirm title="确定删除吗?" @confirm="() => handleDelete(record.id)">
-                  <a>删除</a>
-                </a-popconfirm>
-              </a-menu-item>
+                <a-menu-item>
+                  <a href="javascript:;" @click="handleAgentSettings(scope.row.username)">代理人</a>
+                </a-menu-item>
 
-              <a-menu-item v-if="record.status==1">
-                <a-popconfirm title="确定冻结吗?" @confirm="() => handleFrozen(record.id,2,record.username)">
-                  <a>冻结</a>
-                </a-popconfirm>
-              </a-menu-item>
-
-              <a-menu-item v-if="record.status==2">
-                <a-popconfirm title="确定解冻吗?" @confirm="() => handleFrozen(record.id,1,record.username)">
-                  <a>解冻</a>
-                </a-popconfirm>
-              </a-menu-item>
-
-              <a-menu-item>
-                <a href="javascript:;" @click="handleAgentSettings(record.username)">代理人</a>
-              </a-menu-item>
-
-            </a-menu>
-          </a-dropdown>
-        </div>
-
-      </a-table>
+              </a-menu>
+            </a-dropdown>
+          </template>
+        </el-table-column>
+      </el-table>
+      <pagination :page="ipagination" @refresh="refresh" @setVal="setVal"/>
     </div>
-    <!-- table区域-end -->
-
     <user-modal ref="modalForm" @ok="modalFormOk"></user-modal>
 
     <password-modal ref="passwordmodal" @ok="passwordModalOk"></password-modal>
@@ -173,22 +142,21 @@
   import {frozenBatch} from '@/api/api'
   import {ListMixin} from '@/mixins/ListMixin'
   import SysUserAgentModal from "./modules/SysUserAgentModal";
-  import JInput from '@/components/jeecg/JInput'
   import UserRecycleBinModal from './modules/UserRecycleBinModal'
 
   export default {
-    name: "UserList",
+    name: "index",
     mixins: [ListMixin],
     components: {
       SysUserAgentModal,
       UserModal,
       PasswordModal,
-      JInput,
       UserRecycleBinModal
     },
     data() {
       return {
-        description: '这是用户管理页面',
+        tHeight: 325,
+        description: '用户管理页面',
         queryParam: {},
         recycleBinVisible: false,
         loading: false,

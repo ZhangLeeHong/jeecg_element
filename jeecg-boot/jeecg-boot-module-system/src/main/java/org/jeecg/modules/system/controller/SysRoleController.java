@@ -1,10 +1,8 @@
 package org.jeecg.modules.system.controller;
 
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -13,29 +11,21 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.jeecg.common.api.vo.Result;
-import org.jeecg.common.constant.CacheConstant;
 import org.jeecg.common.constant.CommonConstant;
 import org.jeecg.common.system.query.QueryGenerator;
-import org.jeecg.common.util.PmsUtil;
 import org.jeecg.common.util.oConvertUtils;
-import org.jeecg.modules.system.entity.SysPermission;
-import org.jeecg.modules.system.entity.SysPermissionDataRule;
-import org.jeecg.modules.system.entity.SysRole;
-import org.jeecg.modules.system.entity.SysRolePermission;
+import org.jeecg.modules.system.entity.*;
 import org.jeecg.modules.system.model.TreeModel;
 import org.jeecg.modules.system.service.ISysPermissionDataRuleService;
 import org.jeecg.modules.system.service.ISysPermissionService;
 import org.jeecg.modules.system.service.ISysRolePermissionService;
 import org.jeecg.modules.system.service.ISysRoleService;
-import org.jeecgframework.poi.excel.ExcelImportUtil;
 import org.jeecgframework.poi.excel.def.NormalExcelConstants;
 import org.jeecgframework.poi.excel.entity.ExportParams;
 import org.jeecgframework.poi.excel.entity.ImportParams;
 import org.jeecgframework.poi.excel.view.JeecgEntityExcelView;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -58,17 +48,13 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * <p>
- * 角色表 前端控制器
- * </p>
- *
- * @Author scott
- * @since 2018-12-19
+ * 角色表
  */
 @RestController
 @RequestMapping("/sys/role")
 @Slf4j
 public class SysRoleController {
+
     @Autowired
     private ISysRoleService sysRoleService;
 
@@ -83,21 +69,15 @@ public class SysRoleController {
 
     /**
      * 分页列表查询
-     *
-     * @param role
-     * @param pageNo
-     * @param pageSize
-     * @param req
-     * @return
      */
-    @RequestMapping(value = "/list", method = RequestMethod.GET)
-    public Result<IPage<SysRole>> queryPageList(SysRole role,
-                                                @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo,
-                                                @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize,
-                                                HttpServletRequest req) {
-        Result<IPage<SysRole>> result = new Result<IPage<SysRole>>();
-        QueryWrapper<SysRole> queryWrapper = QueryGenerator.initQueryWrapper(role, req.getParameterMap());
-        Page<SysRole> page = new Page<SysRole>(pageNo, pageSize);
+    @RequestMapping(value = "/list", method = RequestMethod.POST)
+    public Result<IPage<SysRole>> queryPageList(@RequestBody JSONObject jsonObject) {
+        JSONObject json = jsonObject.getJSONObject("queryParam");
+        Result<IPage<SysRole>> result = new Result<>();
+        QueryWrapper<SysRole> queryWrapper = QueryGenerator.initQueryWrapper(new SysRole(), (Map<String, String[]>) null);
+        QueryGenerator.andLikeListOr(queryWrapper, json.get("keyStr"), "role_name", "role_code");
+        QueryGenerator.getSort(queryWrapper, jsonObject);
+        Page<SysRole> page = new Page<>(jsonObject.getInteger("pageNo"), jsonObject.getInteger("pageSize"));
         IPage<SysRole> pageList = sysRoleService.page(page, queryWrapper);
         result.setSuccess(true);
         result.setResult(pageList);
