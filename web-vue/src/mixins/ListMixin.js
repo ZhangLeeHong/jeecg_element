@@ -54,9 +54,8 @@ export const ListMixin = {
       superQueryParams: ""
     }
   },
-  created() {
+  mounted() {
     if (!this.disableMixinCreated) {
-      console.log(' -- mixin created -- ')
       this.loadData();
       //初始化字典配置 在自己页面定义
       this.initDictConfig();
@@ -109,6 +108,7 @@ export const ListMixin = {
       obj.pageNo = this.ipagination.pageNo
       obj.pageSize = this.ipagination.pageSize;
       obj.queryParam = this.queryParam;
+      console.log(this.sort)
       obj.prop = this.sort.prop;
       obj.order = this.sort.order;
       postAction(this.url.list, obj).then((res) => {
@@ -146,7 +146,7 @@ export const ListMixin = {
       if (this.superQueryParams) {
         sqp['superQueryParams'] = encodeURI(this.superQueryParams)
       }
-      var param = Object.assign(sqp, this.queryParam, this.isorter, this.filters);
+      var param = {}
       param.field = this.getQueryField();
       param.pageNo = this.ipagination.current;
       param.pageSize = this.ipagination.pageSize;
@@ -241,10 +241,10 @@ export const ListMixin = {
     handleTableChange(pagination, filters, sorter) {
       //分页、排序、筛选变化时触发
       //TODO 筛选
-      if (Object.keys(sorter).length > 0) {
-        this.isorter.column = sorter.field;
-        this.isorter.order = "ascend" == sorter.order ? "asc" : "desc"
-      }
+      // if (Object.keys(sorter).length > 0) {
+      //   this.sort.prop = sorter.field;
+      //   this.sort.order = "ascend" == sorter.order ? "asc" : "desc"
+      // }
       this.ipagination = pagination;
       this.loadData();
     },

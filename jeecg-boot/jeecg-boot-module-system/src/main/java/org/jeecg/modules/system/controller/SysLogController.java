@@ -3,8 +3,8 @@ package org.jeecg.modules.system.controller;
 
 import java.util.Arrays;
 
-import javax.servlet.http.HttpServletRequest;
-
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.system.query.QueryGenerator;
 import org.jeecg.common.util.oConvertUtils;
@@ -12,10 +12,7 @@ import org.jeecg.modules.system.entity.SysLog;
 import org.jeecg.modules.system.entity.SysRole;
 import org.jeecg.modules.system.service.ISysLogService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -24,12 +21,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * <p>
- * 系统日志表 前端控制器
- * </p>
- *
- * @Author zhangweijian
- * @since 2018-12-26
+ * 系统日志表
  */
 @RestController
 @RequestMapping("/sys/log")
@@ -40,33 +32,27 @@ public class SysLogController {
     private ISysLogService sysLogService;
 
     /**
-     * @param syslog
-     * @param pageNo
-     * @param pageSize
-     * @param req
-     * @return
-     * @功能：查询日志记录
+     * 查询日志记录
      */
-    @RequestMapping(value = "/list", method = RequestMethod.GET)
-    public Result<IPage<SysLog>> queryPageList(SysLog syslog, @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo,
-                                               @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize, HttpServletRequest req) {
-        Result<IPage<SysLog>> result = new Result<IPage<SysLog>>();
-        QueryWrapper<SysLog> queryWrapper = QueryGenerator.initQueryWrapper(syslog, req.getParameterMap());
-        Page<SysLog> page = new Page<SysLog>(pageNo, pageSize);
-        //日志关键词
-        String keyWord = req.getParameter("keyWord");
+    @RequestMapping(value = "/list", method = RequestMethod.POST)
+    public Result<IPage<SysLog>> queryPageList(@RequestBody JSONObject jsonObject) {
+        JSONObject json = jsonObject.getJSONObject("queryParam");
+        Result<IPage<SysLog>> result = new Result<>();
+        QueryWrapper<SysLog> queryWrapper = QueryGenerator.initQueryWrapper(new SysLog(), (JSONObject) null);
+        QueryGenerator.andEqual(queryWrapper, "log_type", "logType", json);
+        JSONArray createTimeRange = json.getJSONArray("createTimeRange");
+        if (createTimeRange != null && createTimeRange.size() > 0) {
+            queryWrapper.ge("create_time", createTimeRange.get(0));
+            queryWrapper.le("create_time", createTimeRange.get(1) + " 23:59:59");
+        }
+        QueryGenerator.getSort(queryWrapper, jsonObject);
+        Page<SysLog> page = new Page<>(jsonObject.getInteger("pageNo"), jsonObject.getInteger("pageSize"));
+        String keyWord = json.getString("keyWord");//日志关键词
         if (oConvertUtils.isNotEmpty(keyWord)) {
             queryWrapper.like("log_content", keyWord);
         }
-        //TODO 过滤逻辑处理
         //TODO begin、end逻辑处理
-        //TODO 一个强大的功能，前端传一个字段字符串，后台只返回这些字符串对应的字段
-        //创建时间/创建人的赋值
         IPage<SysLog> pageList = sysLogService.page(page, queryWrapper);
-        log.info("查询当前页：" + pageList.getCurrent());
-        log.info("查询当前页数量：" + pageList.getSize());
-        log.info("查询结果数量：" + pageList.getRecords().size());
-        log.info("数据总数：" + pageList.getTotal());
         result.setSuccess(true);
         result.setResult(pageList);
         return result;

@@ -132,7 +132,6 @@ public class SysDictController {
             if (dictCode.indexOf(",") != -1) {
                 //关联表字典（举例：sys_user,realname,id）
                 String[] params = dictCode.split(",");
-
                 if (params.length < 3) {
                     result.error500("字典Code格式不正确！");
                     return result;
@@ -140,7 +139,6 @@ public class SysDictController {
                 //SQL注入校验（只限制非法串改数据库）
                 final String[] sqlInjCheck = {params[0], params[1], params[2]};
                 SqlInjectionUtil.filterContent(sqlInjCheck);
-
                 if (params.length == 4) {
                     //SQL注入校验（查询条件SQL 特殊check，此方法仅供此处使用）
                     SqlInjectionUtil.specialFilterContent(params[3]);
@@ -155,7 +153,6 @@ public class SysDictController {
                 //字典表
                 ls = sysDictService.queryDictItemsByCode(dictCode);
             }
-
             result.setSuccess(true);
             result.setResult(ls);
             log.info(result.toString());
@@ -164,7 +161,6 @@ public class SysDictController {
             result.error500("操作失败");
             return result;
         }
-
         return result;
     }
 

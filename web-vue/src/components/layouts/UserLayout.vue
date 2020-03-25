@@ -5,43 +5,30 @@
         <div class="header">
           <a href="/">
             <img src="~@/assets/logo.svg" class="logo" alt="logo">
-            <span class="title">Jeecg Boot</span>
+            <span class="title">ZhangLiHong</span>
           </a>
         </div>
-
       </div>
-
       <route-view></route-view>
-
-      <div class="footer">
-        <div class="links">
-          <a href="http://doc.jeecg.com" target="_blank">帮助</a>
-          <a href="https://github.com/zhangdaiscott/jeecg-boot" target="_blank">隐私</a>
-          <a href="https://github.com/zhangdaiscott/jeecg-boot/blob/master/LICENSE" target="_blank">条款</a>
-        </div>
-        <div class="copyright">
-          Copyright &copy; 2019 <a href="http://www.jeecg.com" target="_blank">JEECG开源社区</a> 出品
-        </div>
-      </div>
     </div>
   </div>
 </template>
 
 <script>
   import RouteView from "@/components/layouts/RouteView"
-  import { mixinDevice } from '@/utils/mixin.js'
+  import {mixinDevice} from '@/utils/mixin.js'
 
   export default {
     name: "UserLayout",
-    components: { RouteView },
+    components: {RouteView},
     mixins: [mixinDevice],
-    data () {
+    data() {
       return {}
     },
-    mounted () {
+    mounted() {
       document.body.classList.add('userLayout')
     },
-    beforeDestroy () {
+    beforeDestroy() {
       document.body.classList.remove('userLayout')
     },
   }
@@ -105,6 +92,7 @@
             top: 2px;
           }
         }
+
         .desc {
           font-size: 14px;
           color: rgba(0, 0, 0, 0.45);
@@ -130,14 +118,17 @@
         .links {
           margin-bottom: 8px;
           font-size: 14px;
+
           a {
             color: rgba(0, 0, 0, 0.45);
             transition: all 0.3s;
+
             &:not(:last-child) {
               margin-right: 40px;
             }
           }
         }
+
         .copyright {
           color: rgba(0, 0, 0, 0.45);
           font-size: 14px;

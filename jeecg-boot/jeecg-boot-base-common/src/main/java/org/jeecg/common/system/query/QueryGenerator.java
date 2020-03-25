@@ -83,9 +83,9 @@ public class QueryGenerator {
             if (order == null) {
                 return queryWrapper;
             }
-            if ("desc".contains(order)) {
+            if ("descending".equals(order)) {
                 queryWrapper.orderBy(true, false, prop);
-            } else if ("asc".contains(order)) {
+            } else if ("ascending".contains(order)) {
                 queryWrapper.orderBy(true, true, prop);
             }
         }
@@ -143,7 +143,6 @@ public class QueryGenerator {
     public static <T> QueryWrapper<T> initQueryWrapper(T searchObj, JSONObject jsonObject) {
         long start = System.currentTimeMillis();
         QueryWrapper<T> queryWrapper = new QueryWrapper<T>();
-        andLikeListOr(queryWrapper, jsonObject.get("keyStr"), "");
         installMplus(queryWrapper, searchObj, null);
         log.debug("---查询条件构造器初始化完成,耗时:" + (System.currentTimeMillis() - start) + "毫秒----");
         return queryWrapper;

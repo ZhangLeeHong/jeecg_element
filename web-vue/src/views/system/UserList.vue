@@ -55,7 +55,7 @@
     </div>
     <div class="mainArea">
       <el-table v-loading="loading" :data="dataSource" ref="table" border
-                :default-sort="sort={prop: 'createTime', order: 'descending'}"
+                :default-sort="sort={prop: 'create_time', order: 'descending'}"
                 @sort-change="sortChange" :height="getHeight(tHeight)"
                 @selection-change="selectionChange" @row-dblclick="rowDblClick">
         <el-table-column type="index" align="center" width="60"/>

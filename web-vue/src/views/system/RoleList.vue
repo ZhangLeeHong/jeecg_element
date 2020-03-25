@@ -13,9 +13,11 @@
           </a-col>
           <a-col :md="10" :sm="12">
             <a-form-item label="创建时间" :labelCol="{span: 5}" :wrapperCol="{span: 18, offset: 1}">
-              <j-date v-model="queryParam.createTime_begin" :showTime="true" date-format="YYYY-MM-DD HH:mm:ss" style="width:45%" placeholder="请选择开始时间" ></j-date>
+              <j-date v-model="queryParam.createTime_begin" :showTime="true" date-format="YYYY-MM-DD HH:mm:ss"
+                      style="width:45%" placeholder="请选择开始时间"></j-date>
               <span style="width: 10px;">~</span>
-              <j-date v-model="queryParam.createTime_end" :showTime="true" date-format="YYYY-MM-DD HH:mm:ss" style="width:45%" placeholder="请选择结束时间"></j-date>
+              <j-date v-model="queryParam.createTime_end" :showTime="true" date-format="YYYY-MM-DD HH:mm:ss"
+                      style="width:45%" placeholder="请选择结束时间"></j-date>
             </a-form-item>
           </a-col>
           <span style="float: left;overflow: hidden;" class="table-page-search-submitButtons">
@@ -29,19 +31,24 @@
     </div>
 
     <!-- 操作按钮区域 -->
-    <div class="table-operator"  style="margin-top: 5px">
+    <div class="table-operator" style="margin-top: 5px">
       <a-button @click="handleAdd" type="primary" icon="plus">新增</a-button>
       <a-button type="primary" icon="download" @click="handleExportXls('角色信息')">导出</a-button>
-      <a-upload name="file" :showUploadList="false" :multiple="false" :headers="tokenHeader" :action="importExcelUrl" @change="handleImportExcel">
+      <a-upload name="file" :showUploadList="false" :multiple="false" :headers="tokenHeader" :action="importExcelUrl"
+                @change="handleImportExcel">
         <a-button type="primary" icon="import">导入</a-button>
       </a-upload>
 
       <a-dropdown v-if="selectedRowKeys.length > 0">
         <a-menu slot="overlay">
-          <a-menu-item key="1" @click="batchDel"><a-icon type="delete"/>删除</a-menu-item>
+          <a-menu-item key="1" @click="batchDel">
+            <a-icon type="delete"/>
+            删除
+          </a-menu-item>
         </a-menu>
         <a-button style="margin-left: 8px">
-          批量操作 <a-icon type="down" />
+          批量操作
+          <a-icon type="down"/>
         </a-button>
       </a-dropdown>
     </div>
@@ -49,7 +56,8 @@
     <!-- table区域-begin -->
     <div>
       <div class="ant-alert ant-alert-info" style="margin-bottom: 16px;">
-        <i class="anticon anticon-info-circle ant-alert-icon"></i> 已选择&nbsp;<a style="font-weight: 600">{{ selectedRowKeys.length }}</a>项&nbsp;&nbsp;
+        <i class="anticon anticon-info-circle ant-alert-icon"></i> 已选择&nbsp;<a style="font-weight: 600">{{
+        selectedRowKeys.length }}</a>项&nbsp;&nbsp;
         <a style="margin-left: 24px" @click="onClearSelected">清空</a>
       </div>
 
@@ -67,11 +75,11 @@
 
         <span slot="action" slot-scope="text, record">
           <a @click="handleEdit(record)">编辑</a>
-          <a-divider type="vertical" />
+          <a-divider type="vertical"/>
 
           <a-dropdown>
             <a class="ant-dropdown-link">
-              更多 <a-icon type="down" />
+              更多 <a-icon type="down"/>
             </a>
             <a-menu slot="overlay">
               <a-menu-item>
@@ -100,67 +108,67 @@
 <script>
   import RoleModal from './modules/RoleModal'
   import UserRoleModal from './modules/UserRoleModal'
-  import { JeecgListMixin } from '@/mixins/JeecgListMixin'
+  import {JeecgListMixin} from '@/mixins/JeecgListMixin'
   import JDate from '@/components/jeecg/JDate'
 
   export default {
     name: "RoleList",
-    mixins:[JeecgListMixin],
+    mixins: [JeecgListMixin],
     components: {
       RoleModal,
       UserRoleModal,
       JDate
     },
-    data () {
+    data() {
       return {
 
         description: '角色管理页面',
         // 查询条件
-        queryParam: {roleName:'',},
+        queryParam: {roleName: '',},
         // 表头
         columns: [
           {
             title: '#',
             dataIndex: '',
-            key:'rowIndex',
-            width:60,
-            align:"center",
-            customRender:function (t,r,index) {
-              return parseInt(index)+1;
+            key: 'rowIndex',
+            width: 60,
+            align: "center",
+            customRender: function (t, r, index) {
+              return parseInt(index) + 1;
             }
           },
           {
             title: '角色名称',
-            align:"center",
+            align: "center",
             dataIndex: 'roleName'
           },
           {
             title: '角色编码',
-            align:"center",
+            align: "center",
             dataIndex: 'roleCode'
           },
           {
             title: '备注',
-            align:"center",
+            align: "center",
             dataIndex: 'description'
           },
           {
             title: '创建时间',
             dataIndex: 'createTime',
-            align:"center",
+            align: "center",
             sorter: true
           },
           {
             title: '更新时间',
             dataIndex: 'updateTime',
-            align:"center",
+            align: "center",
             sorter: true
           },
           {
             title: '操作',
             dataIndex: 'action',
-            align:"center",
-            scopedSlots: { customRender: 'action' },
+            align: "center",
+            scopedSlots: {customRender: 'action'},
           }
         ],
         url: {
@@ -173,13 +181,13 @@
       }
     },
     computed: {
-      importExcelUrl: function(){
+      importExcelUrl: function () {
         return `${window._CONFIG['domianURL']}/${this.url.importExcelUrl}`;
       }
     },
     methods: {
-      handlePerssion: function(roleId){
-       // alert(roleId);
+      handlePerssion: function (roleId) {
+        // alert(roleId);
         this.$refs.modalUserRole.show(roleId);
       },
       onChangeDate(date, dateString) {

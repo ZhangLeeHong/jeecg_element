@@ -21,7 +21,7 @@
         </div>
         <div class="mainArea">
           <el-table v-loading="loading" :data="dataSource" ref="table" border
-                    :default-sort="sort={prop: 'createTime', order: 'descending'}"
+                    :default-sort="sort={prop: 'create_time', order: 'descending'}"
                     @sort-change="sortChange" :height="getHeight(305)"
                     @selection-change="selectionChange">
             <el-table-column type="index" align="center" width="60"/>

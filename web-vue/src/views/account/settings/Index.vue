@@ -8,33 +8,32 @@
             :style="{ border: '0', width: device == 'mobile' ? '560px' : 'auto'}"
             :defaultSelectedKeys="defaultSelectedKeys"
             type="inner"
-            @openChange="onOpenChange"
-          >
+            @openChange="onOpenChange">
             <a-menu-item key="/account/settings/base">
               <router-link :to="{ name: 'account-settings-base' }">
                 基本设置
               </router-link>
             </a-menu-item>
-            <a-menu-item key="/account/settings/security">
-              <router-link :to="{ name: 'account-settings-security' }">
-                安全设置
-              </router-link>
-            </a-menu-item>
+            <!--<a-menu-item key="/account/settings/security">-->
+              <!--<router-link :to="{ name: 'account-settings-security' }">-->
+                <!--安全设置-->
+              <!--</router-link>-->
+            <!--</a-menu-item>-->
             <a-menu-item key="/account/settings/custom">
               <router-link :to="{ name: 'account-settings-custom' }">
                 个性化
               </router-link>
             </a-menu-item>
-            <a-menu-item key="/account/settings/binding">
-              <router-link :to="{ name: 'account-settings-binding' }">
-                账户绑定
-              </router-link>
-            </a-menu-item>
-            <a-menu-item key="/account/settings/notification">
-              <router-link :to="{ name: 'account-settings-notification' }">
-                新消息通知
-              </router-link>
-            </a-menu-item>
+            <!--<a-menu-item key="/account/settings/binding">-->
+              <!--<router-link :to="{ name: 'account-settings-binding' }">-->
+                <!--账户绑定-->
+              <!--</router-link>-->
+            <!--</a-menu-item>-->
+            <!--<a-menu-item key="/account/settings/notification">-->
+              <!--<router-link :to="{ name: 'account-settings-notification' }">-->
+                <!--新消息通知-->
+              <!--</router-link>-->
+            <!--</a-menu-item>-->
           </a-menu>
         </div>
         <div class="account-settings-info-right">
@@ -51,7 +50,7 @@
 <script>
   import PageLayout from '@/components/page/PageLayout'
   import RouteView from "@/components/layouts/RouteView"
-  import { mixinDevice } from '@/utils/mixin.js'
+  import {mixinDevice} from '@/utils/mixin.js'
 
   export default {
     components: {
@@ -59,11 +58,11 @@
       PageLayout
     },
     mixins: [mixinDevice],
-    data () {
+    data() {
       return {
         // horizontal  inline
         mode: 'inline',
-        mainInfoHeight:"100%",
+        mainInfoHeight: "100%",
         openKeys: [],
         defaultSelectedKeys: [],
 
@@ -88,19 +87,19 @@
         pageTitle: ''
       }
     },
-    created () {
+    created() {
       this.updateMenu()
     },
-    mounted(){
-      this.mainInfoHeight = (window.innerHeight-285)+"px";
+    mounted() {
+      this.mainInfoHeight = (window.innerHeight - 285) + "px";
     },
     methods: {
-      onOpenChange (openKeys) {
+      onOpenChange(openKeys) {
         this.openKeys = openKeys
       },
-      updateMenu () {
+      updateMenu() {
         let routes = this.$route.matched.concat()
-        this.defaultSelectedKeys = [ routes.pop().path ]
+        this.defaultSelectedKeys = [routes.pop().path]
       }
     },
   }
@@ -124,6 +123,7 @@
         overflow-x: auto;
         overflow-y: scroll;
       }
+
       .account-settings-info-right {
         padding: 20px 40px;
       }
@@ -139,12 +139,13 @@
       padding: 8px 40px;
 
       .account-settings-info-title {
-        color: rgba(0,0,0,.85);
+        color: rgba(0, 0, 0, .85);
         font-size: 20px;
         font-weight: 500;
         line-height: 28px;
         margin-bottom: 12px;
       }
+
       .account-settings-info-view {
         padding-top: 12px;
       }

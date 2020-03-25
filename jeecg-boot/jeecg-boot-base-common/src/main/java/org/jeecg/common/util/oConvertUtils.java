@@ -17,9 +17,7 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/**
- * @Author 张代浩
- */
+
 @Slf4j
 public class oConvertUtils {
     public static boolean isEmpty(Object object) {
@@ -140,14 +138,6 @@ public class oConvertUtils {
         return s;
     }
 
-	/*public static Short getShort(String s) {
-		if (StringUtil.isNotEmpty(s)) {
-			return (Short.parseShort(s));
-		} else {
-			return null;
-		}
-	}*/
-
     public static int getInt(Object object, int defval) {
         if (isEmpty(object)) {
             return (defval);
@@ -197,8 +187,6 @@ public class oConvertUtils {
     /**
      * 转义成Unicode编码
      *
-     * @param s
-     * @return
      */
 	/*public static String escapeJava(Object s) {
 		return StringEscapeUtils.escapeJava(getString(s));
