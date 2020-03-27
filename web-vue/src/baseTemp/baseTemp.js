@@ -1,8 +1,6 @@
 import index from "./baseTools/index"
 import Pagination from './Pagination'
 
-//input
-import fuzzyInput from './input/fuzzyInput'
 
 //button
 import buttonAdd from "./button/buttonAdd"
@@ -16,8 +14,6 @@ import buttonRefresh from "./button/buttonRefresh"
 export default (Vue) => {
   //分页
   Vue.component("Pagination", Pagination);
-  //input
-  Vue.component("fuzzyInput", fuzzyInput);
   //button
   Vue.component("buttonRefresh", buttonRefresh);
   Vue.component("buttonAdd", buttonAdd);

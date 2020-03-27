@@ -1,3 +1,67 @@
+<style lang="less" scoped>
+  .user-wrapper {
+    float: right;
+    height: 100%;
+
+    .action {
+      cursor: pointer;
+      padding: 0 14px;
+      display: inline-block;
+      transition: all .3s;
+      height: 70%;
+      line-height: 46px;
+
+      .logout_title {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      &.action-full {
+        height: 100%;
+      }
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.3);
+      }
+
+      .el-avatar--small {
+        margin: 20px 10px 20px 0;
+        color: #1890ff;
+        background: hsla(0, 0%, 100%, .85);
+        vertical-align: middle;
+      }
+
+      .icon {
+        font-size: 16px;
+        padding: 4px;
+      }
+
+      .anticon {
+        color: white;
+      }
+    }
+
+    .search-input {
+      width: 180px;
+      color: inherit;
+
+      /deep/ .ant-select-selection {
+        background-color: inherit;
+        border: 0;
+        border-bottom: 1px solid white;
+
+        &__placeholder, &__field__placeholder {
+          color: inherit;
+        }
+      }
+    }
+  }
+
+</style>
+
+<style scoped>
+
+</style>
 <template>
   <div class="user-wrapper" :class="theme">
     <span class="action" @click="showClick">
@@ -22,10 +86,10 @@
       </a-select>
     </component>
     <a-dropdown>
-      <span class="action action-full ant-dropdown-link user-dropdown-menu">
-        <a-avatar class="avatar" size="small" :src="getAvatar()"/>
+      <div class="action action-full ant-dropdown-link user-dropdown-menu">
+        <el-avatar class="avatar" size="small" :src="getAvatar()"/>
         <span v-if="isDesktop()">欢迎您，{{ nickname() }}</span>
-      </span>
+      </div>
       <a-menu slot="overlay" class="user-dropdown-menu-wrapper">
         <a-menu-item key="1">
           <router-link :to="{ name: 'account-settings-base' }">
@@ -126,7 +190,6 @@
       },
       handleLogout() {
         const that = this
-
         this.$confirm({
           title: '提示',
           content: '真的要注销登录吗 ?',
@@ -155,7 +218,6 @@
       systemSetting() {
         this.$refs.settingDrawer.showDrawer()
       },
-      /* update_begin author:zhaoxin date:20191129 for: 做头部菜单栏导航*/
       searchMenus(arr, menus) {
         for (let i of menus) {
           if (!i.hidden && "layouts/RouteView" !== i.component) {
@@ -169,7 +231,6 @@
       filterOption(input, option) {
         return option.componentOptions.children[0].text.toLowerCase().indexOf(input.toLowerCase()) >= 0
       },
-      // update_begin author:sunjianlei date:20191230 for: 解决外部链接打开失败的问题
       searchMethods(value) {
         let route = this.searchMenuOptions.filter(item => item.id === value)[0]
         if (route.meta.internalOrExternal === true || route.component.includes('layouts/IframePageView')) {
@@ -179,37 +240,6 @@
         }
         this.searchMenuVisible = false
       }
-      // update_end author:sunjianlei date:20191230 for: 解决外部链接打开失败的问题
-      /*update_end author:zhaoxin date:20191129 for: 做头部菜单栏导航*/
     }
   }
 </script>
-
-<style lang="less" scoped>
-  /* update_begin author:zhaoxin date:20191129 for: 让搜索框颜色能随主题颜色变换*/
-  /* update-begin author:sunjianlei date:20191220 for: 解决全局样式冲突问题 */
-  .user-wrapper .search-input {
-    width: 180px;
-    color: inherit;
-
-    /deep/ .ant-select-selection {
-      background-color: inherit;
-      border: 0;
-      border-bottom: 1px solid white;
-
-      &__placeholder, &__field__placeholder {
-        color: inherit;
-      }
-    }
-  }
-
-  /* update-end author:sunjianlei date:20191220 for: 解决全局样式冲突问题 */
-  /* update_end author:zhaoxin date:20191129 for: 让搜索框颜色能随主题颜色变换*/
-</style>
-
-<style scoped>
-  .logout_title {
-    color: inherit;
-    text-decoration: none;
-  }
-</style>

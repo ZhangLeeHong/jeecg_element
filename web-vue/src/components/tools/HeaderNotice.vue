@@ -319,7 +319,7 @@
   }
 </script>
 
-<style lang="css">
+<style lang="css" scoped>
   .header-notice-wrapper {
     top: 50px !important;
   }

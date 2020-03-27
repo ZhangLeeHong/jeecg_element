@@ -1,10 +1,8 @@
 <template>
-  <!-- , width: fixedHeader ? `calc(100% - ${sidebarOpened ? 256 : 80}px)` : '100%'  -->
   <a-layout-header
     v-if="!headerBarFixed"
     :class="[fixedHeader && 'ant-header-fixedHeader', sidebarOpened ? 'ant-header-side-opened' : 'ant-header-side-closed', ]"
     :style="{ padding: '0' }">
-
     <div v-if="mode === 'sidemenu'" class="header" :class="theme">
       <a-icon
         v-if="device==='mobile'"
@@ -18,7 +16,7 @@
         @click="toggle"/>
 
       <span v-if="device === 'desktop'">欢迎进入企业级快速开发平台</span>
-      <span v-else>Jeecg-Boot</span>
+      <span v-else>ZhangLiHong</span>
 
       <user-menu :theme="theme"/>
     </div>
@@ -51,7 +49,7 @@
   import SMenu from '../menu/'
   import Logo from '../tools/Logo'
 
-  import { mixin } from '@/utils/mixin.js'
+  import {mixin} from '@/utils/mixin.js'
 
   export default {
     name: 'GlobalHeader',
@@ -113,14 +111,11 @@
         }
       }
     },
-    //update-end--author:sunjianlei---date:20190508------for: 顶部导航栏过长时显示更多按钮-----
     mounted() {
       window.addEventListener('scroll', this.handleScroll)
-      //update-begin--author:sunjianlei---date:20190508------for: 顶部导航栏过长时显示更多按钮-----
       if (this.mode === 'topmenu') {
         this.buildTopMenuStyle()
       }
-      //update-end--author:sunjianlei---date:20190508------for: 顶部导航栏过长时显示更多按钮-----
     },
     methods: {
       handleScroll() {
@@ -138,7 +133,6 @@
       toggle() {
         this.$emit('toggle')
       },
-      //update-begin--author:sunjianlei---date:20190508------for: 顶部导航栏过长时显示更多按钮-----
       buildTopMenuStyle() {
         if (this.mode === 'topmenu') {
           if (this.device === 'mobile') {
@@ -149,20 +143,18 @@
             this.topMenuStyle.headerIndexLeft = {}
           } else {
             let rightWidth = '360px'
-            this.topMenuStyle.topNavHeader = { 'min-width': '165px' }
-            this.topMenuStyle.topSmenuStyle = { 'width': 'calc(100% - 165px)' }
-            this.topMenuStyle.headerIndexRight = { 'min-width': rightWidth }
-            this.topMenuStyle.headerIndexLeft = { 'width': `calc(100% - ${rightWidth})` }
+            this.topMenuStyle.topNavHeader = {'min-width': '165px'}
+            this.topMenuStyle.topSmenuStyle = {'width': 'calc(100% - 165px)'}
+            this.topMenuStyle.headerIndexRight = {'min-width': rightWidth}
+            this.topMenuStyle.headerIndexLeft = {'width': `calc(100% - ${rightWidth})`}
           }
         }
       }
-      //update-begin--author:sunjianlei---date:20190508------for: 顶部导航栏过长时显示更多按钮-----
     }
   }
 </script>
 
 <style lang="less" scoped>
-  /* update_begin author:scott date:20190220 for: 缩小首页布局顶部的高度*/
 
   @height: 59px;
 
@@ -178,8 +170,10 @@
           line-height: @height;
         }
       }
+
       .trigger {
         line-height: 64px;
+
         &:hover {
           background: rgba(0, 0, 0, 0.05);
         }
@@ -194,6 +188,7 @@
       transition: background 300ms;
 
       /* dark 样式 */
+
       &.dark {
         color: #000000;
         box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
@@ -212,7 +207,5 @@
     height: @height;
     line-height: @height;
   }
-
-  /* update_end author:scott date:20190220 for: 缩小首页布局顶部的高度*/
 
 </style>

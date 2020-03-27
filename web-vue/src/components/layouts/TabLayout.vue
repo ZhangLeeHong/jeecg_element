@@ -279,7 +279,7 @@
   }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 
   .page-transition-enter {
     opacity: 0;

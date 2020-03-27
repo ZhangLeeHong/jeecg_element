@@ -6,11 +6,15 @@ function resolve(dir) {
 
 // vue.config.js
 module.exports = {
-  /*
-    Vue-cli3:
-    Crashed when using Webpack `import()` #2463
-    https://github.com/vuejs/vue-cli/issues/2463
-   */
+
+  // build时放置生成的静态资源 (js、css、img、fonts) 的目录 (相对于vue-cli2.0 assetsSubDirectory )
+  assetsDir: 'webStatic',
+  // build时构建文件的目录 (相对于vue-cli2.0 assetsRoot )
+  outputDir: 'out',
+  //相对于vue-cli2.0 build: {
+  //   // Template for index.html
+  //   index: path.resolve(__dirname, '../dist_wxH5/wxIndex.html'),
+  indexPath: 'webIndex.html',
   // 如果你不需要生产环境的 source map，可以将其设置为 false 以加速生产环境构建。
   productionSourceMap: false,
 

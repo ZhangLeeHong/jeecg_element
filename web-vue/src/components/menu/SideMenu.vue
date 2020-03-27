@@ -5,7 +5,7 @@
     :collapsible="collapsible"
     v-model="collapsed"
     :trigger="null">
-    <logo />
+    <logo/>
     <s-menu
       :collapsed="collapsed"
       :menu="menus"
@@ -22,11 +22,11 @@
   import ALayoutSider from "ant-design-vue/es/layout/Sider"
   import Logo from '../tools/Logo'
   import SMenu from './index'
-  import { mixin, mixinDevice } from '@/utils/mixin.js'
+  import {mixin, mixinDevice} from '@/utils/mixin.js'
 
   export default {
     name: "SideMenu",
-    components: { ALayoutSider, Logo, SMenu },
+    components: {ALayoutSider, Logo, SMenu},
     mixins: [mixin, mixinDevice],
     props: {
       mode: {
@@ -54,9 +54,9 @@
         required: true
       }
     },
-    computed:{
+    computed: {
       smenuStyle() {
-        let style = { 'padding': '0' }
+        let style = {'padding': '0'}
         if (this.fixSiderbar) {
           style['height'] = 'calc(100% - 59px)'
           style['overflow'] = 'auto'
@@ -66,7 +66,7 @@
       }
     },
     methods: {
-      onSelect (obj) {
+      onSelect(obj) {
         this.$emit('menuSelect', obj)
       }
     }
@@ -74,13 +74,12 @@
 </script>
 <style lang="less" scoped>
 
-  /* update_begin author:sunjianlei date:20190509 for: 修改侧边导航栏滚动条的样式 */
   .sider {
     @scrollBarSize: 10px;
 
     ul.ant-menu {
 
-      /* 定义滚动条高宽及背景 高宽分别对应横竖滚动条的尺寸*/
+
       &::-webkit-scrollbar {
         width: @scrollBarSize;
         height: @scrollBarSize;
@@ -102,12 +101,12 @@
       -ms-scroll-snap-type: proximity;
       -ms-scroll-snap-points-x: snapList(100%, 200%, 300%, 400%, 500%);
 
-      /* 定义滚动条轨道 */
+
       &::-webkit-scrollbar-track {
         background-color: transparent;
       }
 
-      /* 定义滑块 */
+
       &::-webkit-scrollbar-thumb {
         border-radius: @scrollBarSize;
         background-color: #eee;
@@ -124,6 +123,7 @@
     }
 
     /** 暗色系滚动条样式 */
+
     &.dark ul.ant-menu {
       &::-webkit-scrollbar-thumb {
         background-color: #666666;

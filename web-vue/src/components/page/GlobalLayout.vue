@@ -9,8 +9,7 @@
         @close="() => this.collapsed = false"
         :closable="false"
         :visible="collapsed"
-        width="200px"
-      >
+        width="200px">
         <side-menu
           mode="inline"
           :menus="menus"
@@ -38,8 +37,7 @@
         @close="() => this.collapsed = false"
         :closable="false"
         :visible="collapsed"
-        width="200px"
-      >
+        width="200px">
         <side-menu
           mode="inline"
           :menus="menus"
@@ -60,18 +58,13 @@
         :theme="navTheme"
         :collapsed="collapsed"
         :device="device"
-        @toggle="toggle"
-      />
+        @toggle="toggle"/>
 
       <!-- layout content -->
       <a-layout-content :style="{ height: '100%', paddingTop: fixedHeader ? '59px' : '0' }">
         <slot></slot>
       </a-layout-content>
 
-      <!-- layout footer -->
-      <!--<a-layout-footer style="padding: 0px">-->
-        <!--<global-footer/>-->
-      <!--</a-layout-footer>-->
     </a-layout>
 
     <!-- update-start---- author:os_chengtgen -- date:20190830 --  for:issues/463 -编译主题颜色已生效，但还一直转圈，显示主题 正在编译 ---- -->
@@ -116,15 +109,13 @@
       }
     },
     created() {
-      //--update-begin----author:scott---date:20190320------for:根据后台菜单配置，判断是否路由菜单字段，动态选择是否生成路由（为了支持参数URL菜单）------
-      //this.menus = this.mainRouters.find((item) => item.path === '/').children;
+      //根据后台菜单配置，判断是否路由菜单字段，动态选择是否生成路由（为了支持参数URL菜单）------
       this.menus = this.permissionMenuList
       // 根据后台配置菜单，重新排序加载路由信息
       console.log('----加载菜单逻辑----')
       console.log(this.mainRouters)
       console.log(this.permissionMenuList)
       console.log('----navTheme------' + this.navTheme)
-      //--update-end----author:scott---date:20190320------for:根据后台菜单配置，判断是否路由菜单字段，动态选择是否生成路由（为了支持参数URL菜单）------
     },
     methods: {
       ...mapActions(['setSidebar']),
@@ -138,15 +129,12 @@
           this.collapsed = false
         }
       },
-      //update-begin-author:taoyan date:20190430 for:动态路由title显示配置的菜单title而不是其对应路由的title
       myMenuSelect(value) {
         //此处触发动态路由被点击事件
         this.findMenuBykey(this.menus, value.key)
         this.$emit("dynamicRouterShow", value.key, this.activeMenu.meta.title)
-        // update-begin-author:sunjianlei date:20191223 for: 修复刷新后菜单Tab名字显示异常
         let storeKey = 'route:title:' + this.activeMenu.path
         this.$ls.set(storeKey, this.activeMenu.meta.title)
-        // update-end-author:sunjianlei date:20191223 for: 修复刷新后菜单Tab名字显示异常
       },
       findMenuBykey(menus, key) {
         for (let i of menus) {
@@ -157,21 +145,20 @@
           }
         }
       }
-      //update-end-author:taoyan date:20190430 for:动态路由title显示配置的菜单title而不是其对应路由的title
     }
   }
 
 </script>
 
-<style lang="less">
-  body {
-    // 打开滚动条固定显示
-    overflow-y: scroll;
+<style lang="less" scoped>
+  /*body {*/
+    /*// 打开滚动条固定显示*/
+    /*overflow-y: scroll;*/
 
-    &.colorWeak {
-      filter: invert(80%);
-    }
-  }
+    /*&.colorWeak {*/
+      /*filter: invert(80%);*/
+    /*}*/
+  /*}*/
 
   .layout {
     min-height: 100vh !important;
@@ -221,9 +208,7 @@
       }
 
       .header, .top-nav-header-index {
-        .user-wrapper .action {
-          padding: 0 12px;
-        }
+
       }
     }
 
@@ -305,44 +290,6 @@
 
     .header, .top-nav-header-index {
 
-      .user-wrapper {
-        float: right;
-        height: 100%;
-
-        .action {
-          cursor: pointer;
-          padding: 0 14px;
-          display: inline-block;
-          transition: all .3s;
-
-          height: 70%;
-          line-height: 46px;
-
-          &.action-full {
-            height: 100%;
-          }
-
-          &:hover {
-            background: rgba(255, 255, 255, 0.3);
-          }
-
-          .avatar {
-            margin: 20px 10px 20px 0;
-            color: #1890ff;
-            background: hsla(0, 0%, 100%, .85);
-            vertical-align: middle;
-          }
-
-          .icon {
-            font-size: 16px;
-            padding: 4px;
-          }
-
-          .anticon {
-            color: white;
-          }
-        }
-      }
 
       &.dark {
         .user-wrapper {
@@ -403,7 +350,6 @@
     }
 
     &.tablet {
-      // overflow: hidden; text-overflow:ellipsis; white-space: nowrap;
       .top-nav-header-index {
 
         .header-index-wide {

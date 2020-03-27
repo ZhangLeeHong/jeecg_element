@@ -125,7 +125,7 @@
   }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
   .j-modal-box {
 
     &.fullscreen {
