@@ -40,6 +40,7 @@ public class SysLogController {
         Result<IPage<SysLog>> result = new Result<>();
         QueryWrapper<SysLog> queryWrapper = QueryGenerator.initQueryWrapper(new SysLog(), (JSONObject) null);
         QueryGenerator.andEqual(queryWrapper, "log_type", "logType", json);
+        QueryGenerator.andEqual(queryWrapper, "operate_type", "operate_type", json);
         JSONArray createTimeRange = json.getJSONArray("createTimeRange");
         if (createTimeRange != null && createTimeRange.size() > 0) {
             queryWrapper.ge("create_time", createTimeRange.get(0));

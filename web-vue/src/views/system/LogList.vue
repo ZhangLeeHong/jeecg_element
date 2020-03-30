@@ -16,7 +16,13 @@
                       style="width: 250px;margin:  0px 8px; " @keyup.enter.native="loadData"
                       clearable @change="loadData" value-format="yyyy-MM-dd"
                       range-separator="~" start-placeholder="开始时间" end-placeholder="结束时间"/>
-      <j-dict-select-tag v-model="queryParam.operateType" placeholder="请选择操作类型" dictCode="operate_type"/>
+      <!--<j-dict-select-tag v-model="queryParam.operateType" placeholder="请选择操作类型" dictCode="operate_type"/>-->
+      <div v-if="queryParam.logType==2" style="display: inline-block;">
+        <el-select v-model="queryParam.operate_type" placeholder="请选择操作类型" clearable @change="loadData"
+                   style="width: 140px" @clear="loadData" size="small">
+          <el-option v-for="(item,key) in  operateTypeList" :key="key" :label="item.title" :value="item.value"/>
+        </el-select>
+      </div>
 
       <a-button type="primary" style="left: 10px" @click="loadData" icon="search">查询</a-button>
       <a-button type="primary" @click="searchReset" icon="reload"
@@ -29,6 +35,18 @@
                 :default-sort="sort={prop: 'create_time', order: 'descending'}"
                 @sort-change="sortChange" :height="getHeight(300)"
                 @selection-change="selectionChange">
+        <el-table-column type="expand">
+          <template slot-scope="props">
+            <el-form label-position="left" class="demo-table-expand">
+              <el-form-item label="请求方法">
+                <span>{{ props.row.method }}</span>
+              </el-form-item>
+              <el-form-item label="请求参数">
+                <span>{{ props.row.requestParam }}</span>
+              </el-form-item>
+            </el-form>
+          </template>
+        </el-table-column>
         <el-table-column type="index" align="center" width="60"/>
         <el-table-column prop="logContent" label="日志内容" width="180" show-overflow-tooltip/>
         <el-table-column prop="userid" label="操作人ID" width="140"/>
@@ -59,6 +77,7 @@
   import {filterObj} from '@/utils/util';
   import {ListMixin} from '@/mixins/ListMixin'
   import JEllipsis from '@/components/jeecg/JEllipsis'
+  import {ajaxGetDictItems} from '@/api/api'
 
   export default {
     name: "LogList",
@@ -68,6 +87,7 @@
     },
     data() {
       return {
+        operateTypeList: [],//操作类型list
         description: '这是日志管理页面',
         // 查询条件
         queryParam: {
@@ -188,6 +208,17 @@
       onDateOk(value) {
         console.log(value);
       },
+      initDictData() {
+        //根据字典Code, 初始化字典数组
+        ajaxGetDictItems("operate_type", null).then((res) => {
+          if (res.success) {
+            this.operateTypeList = res.result;
+          }
+        })
+      },
+    },
+    mounted() {
+      this.initDictData();
     }
   }
 </script>

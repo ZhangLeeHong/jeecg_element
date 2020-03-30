@@ -21,13 +21,13 @@
       </div>
       <div class="mainArea">
         <el-table v-loading="loading" :data="dataSource" ref="table" border
-                  :default-sort="sort={prop: 'createTime', order: 'descending'}"
+                  :default-sort="sort={prop: 'create_time', order: 'descending'}"
                   @sort-change="sortChange" :height="getHeight(340)"
                   @selection-change="selectionChange" @row-dblclick="rowDblClick">
           <el-table-column type="index" align="center" width="60"/>
           <el-table-column prop="dictName" label="字典名称" width="160"/>
           <el-table-column prop="dictCode" label="字典编号" width="160"/>
-          <el-table-column prop="description" label="描述" width="160"/>
+          <el-table-column prop="description" label="描述" width="160" show-overflow-tooltip/>
           <el-table-column prop="createTime" label="创建时间" width="140" align="center" sortable>
             <template slot-scope="scope">
               <span>{{ scope.row.createTime | moment('YYYY-MM-DD HH:mm') }}</span>

@@ -130,26 +130,6 @@
         </div>
         <a-divider/>
 
-        <div :style="{ marginBottom: '24px' }">
-          <h3 class="setting-drawer-index-title">其他设置</h3>
-          <div>
-            <a-list :split="false">
-              <a-list-item>
-                <a-switch slot="actions" size="small" :defaultChecked="colorWeak" @change="onColorWeak"/>
-                <a-list-item-meta>
-                  <div slot="title">色弱模式</div>
-                </a-list-item-meta>
-              </a-list-item>
-              <a-list-item>
-                <a-switch slot="actions" size="small" :defaultChecked="multipage" @change="onMultipageWeak"/>
-                <a-list-item-meta>
-                  <div slot="title">多页签模式</div>
-                </a-list-item-meta>
-              </a-list-item>
-            </a-list>
-          </div>
-        </div>
-        <a-divider/>
       </div>
       <div class="setting-drawer-index-handle" @click="toggle" v-if="visible">
         <a-icon type="close"/>
