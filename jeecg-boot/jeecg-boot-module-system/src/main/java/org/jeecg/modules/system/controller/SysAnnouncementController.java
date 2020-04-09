@@ -22,6 +22,7 @@ import org.jeecg.common.util.oConvertUtils;
 import org.jeecg.modules.message.websocket.WebSocket;
 import org.jeecg.modules.system.entity.SysAnnouncement;
 import org.jeecg.modules.system.entity.SysAnnouncementSend;
+import org.jeecg.modules.system.entity.SysUser;
 import org.jeecg.modules.system.service.ISysAnnouncementSendService;
 import org.jeecg.modules.system.service.ISysAnnouncementService;
 import org.jeecgframework.poi.excel.ExcelImportUtil;
@@ -47,12 +48,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
 import lombok.extern.slf4j.Slf4j;
 
-/**
- * @Title: Controller
- * @Description: 系统通告表
- * @Author: jeecg-boot
- * @Date: 2019-01-02
- * @Version: V1.0
+/***
+ * 系统通告表
  */
 @RestController
 @RequestMapping("/sys/annountCement")
@@ -67,32 +64,17 @@ public class SysAnnouncementController {
 
     /**
      * 分页列表查询
-     *
-     * @param sysAnnouncement
-     * @param pageNo
-     * @param pageSize
-     * @param req
-     * @return
      */
-    @RequestMapping(value = "/list", method = RequestMethod.GET)
-    public Result<IPage<SysAnnouncement>> queryPageList(SysAnnouncement sysAnnouncement,
-                                                        @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo,
-                                                        @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize,
-                                                        HttpServletRequest req) {
-        Result<IPage<SysAnnouncement>> result = new Result<IPage<SysAnnouncement>>();
+    @RequestMapping(value = "/list", method = RequestMethod.POST)
+    public Result<IPage<SysAnnouncement>> queryPageList(@RequestBody JSONObject jsonObject) {
+        Result<IPage<SysAnnouncement>> result = new Result<>();
+        JSONObject json = jsonObject.getJSONObject("queryParam");
+        SysAnnouncement sysAnnouncement = new SysAnnouncement();
         sysAnnouncement.setDelFlag(CommonConstant.DEL_FLAG_0.toString());
-        QueryWrapper<SysAnnouncement> queryWrapper = new QueryWrapper<SysAnnouncement>(sysAnnouncement);
-        Page<SysAnnouncement> page = new Page<SysAnnouncement>(pageNo, pageSize);
-        //排序逻辑 处理
-        String column = req.getParameter("column");
-        String order = req.getParameter("order");
-        if (oConvertUtils.isNotEmpty(column) && oConvertUtils.isNotEmpty(order)) {
-            if ("asc".equals(order)) {
-                queryWrapper.orderByAsc(oConvertUtils.camelToUnderline(column));
-            } else {
-                queryWrapper.orderByDesc(oConvertUtils.camelToUnderline(column));
-            }
-        }
+        QueryWrapper<SysAnnouncement> queryWrapper = QueryGenerator.initQueryWrapper(sysAnnouncement, (Map<String, String[]>) null);
+        QueryGenerator.andLikeListOr(queryWrapper, json.get("keyStr"), "title");
+        QueryGenerator.getSort(queryWrapper, jsonObject);
+        Page<SysAnnouncement> page = new Page<>(jsonObject.getInteger("pageNo"), jsonObject.getInteger("pageSize"));
         IPage<SysAnnouncement> pageList = sysAnnouncementService.page(page, queryWrapper);
         log.info("查询当前页：" + pageList.getCurrent());
         log.info("查询当前页数量：" + pageList.getSize());
@@ -280,10 +262,8 @@ public class SysAnnouncementController {
         return result;
     }
 
-    /**
-     * @param id
-     * @return
-     * @功能：补充用户数据，并返回系统消息
+    /***
+     * 补充用户数据，并返回系统消息
      */
     @RequestMapping(value = "/listByUser", method = RequestMethod.GET)
     public Result<Map<String, Object>> listByUser() {

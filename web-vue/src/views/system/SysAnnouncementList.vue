@@ -3,36 +3,20 @@
 
     <!-- 查询区域 -->
     <div class="table-page-search-wrapper">
-      <a-form layout="inline" @keyup.enter.native="searchQuery">
-        <a-row :gutter="24">
+      <a-button @click="handleAdd" type="primary" icon="plus" style="margin-right: 5px;">新增</a-button>
 
-          <a-col :span="6">
-            <a-form-item label="标题">
-              <a-input placeholder="请输入标题" v-model="queryParam.titile"></a-input>
-            </a-form-item>
-          </a-col>
-          <!--<a-col :span="6">
-            <a-form-item label="内容">
-              <a-input placeholder="请输入内容" v-model="queryParam.msgContent"></a-input>
-            </a-form-item>
-          </a-col>-->
+      <el-input placeholder="请输入标题" v-model="queryParam.keyStr" clearable @keyup.enter.native="loadData"
+                @clear="loadData" style="width:180px" size="small"/>
+      <a-button type="primary" @click="loadData" icon="search">查询</a-button>
+      <a-button type="primary" @click="searchReset" icon="reload" style="margin-left: 8px">重置</a-button>
 
-          <a-col :span="8">
-            <span style="float: left;overflow: hidden;" class="table-page-search-submitButtons">
-              <a-button type="primary" @click="searchQuery" icon="search">查询</a-button>
-              <a-button type="primary" @click="searchReset" icon="reload" style="margin-left: 8px">重置</a-button>
-            </span>
-          </a-col>
-
-        </a-row>
-      </a-form>
     </div>
 
     <!-- 操作按钮区域 -->
     <div class="table-operator">
-      <a-button @click="handleAdd" type="primary" icon="plus">新增</a-button>
       <a-button type="primary" icon="download" @click="handleExportXls('系统通告')">导出</a-button>
-      <a-upload name="file" :showUploadList="false" :multiple="false" :headers="tokenHeader" :action="importExcelUrl" @change="handleImportExcel">
+      <a-upload name="file" :showUploadList="false" :multiple="false" :headers="tokenHeader" :action="importExcelUrl"
+                @change="handleImportExcel">
         <a-button type="primary" icon="import">导入</a-button>
       </a-upload>
       <a-dropdown v-if="selectedRowKeys.length > 0">
@@ -50,10 +34,6 @@
 
     <!-- table区域-begin -->
     <div>
-      <div class="ant-alert ant-alert-info" style="margin-bottom: 16px;">
-        <i class="anticon anticon-info-circle ant-alert-icon"></i> 已选择 <a style="font-weight: 600">{{ selectedRowKeys.length }}</a>项
-        <a style="margin-left: 24px" @click="onClearSelected">清空</a>
-      </div>
 
       <a-table
         ref="table"
@@ -68,7 +48,7 @@
         @change="handleTableChange">
 
         <span slot="action" slot-scope="text, record">
-          <a  v-if="record.sendStatus == 0" @click="handleEdit(record)">编辑</a>
+          <a v-if="record.sendStatus == 0" @click="handleEdit(record)">编辑</a>
 
           <a-divider type="vertical" v-if="record.sendStatus == 0"/>
           <a-dropdown>
@@ -108,11 +88,11 @@
 <script>
   import SysAnnouncementModal from './modules/SysAnnouncementModal'
   import {doReleaseData, doReovkeData} from '@/api/api'
-  import {JeecgListMixin} from '@/mixins/JeecgListMixin'
+  import {ListMixin} from '@/mixins/ListMixin'
 
   export default {
     name: "SysAnnouncementList",
-    mixins: [JeecgListMixin],
+    mixins: [ListMixin],
     components: {
       SysAnnouncementModal
     },
@@ -153,16 +133,6 @@
               }
             }
           },
-          /*{
-            title: '开始时间',
-            align: "center",
-            dataIndex: 'startTime'
-          },
-          {
-            title: '结束时间',
-            align: "center",
-            dataIndex: 'endTime'
-          },*/
           {
             title: '发布人',
             align: "center",
@@ -248,7 +218,7 @@
       }
     },
     computed: {
-      importExcelUrl: function(){
+      importExcelUrl: function () {
         return `${window._CONFIG['domianURL']}/${this.url.importExcelUrl}`;
       }
     },
