@@ -18,7 +18,7 @@
       RouteView,
       PageLayout
     },
-    data () {
+    data() {
       return {
         title: '',
         description: '',
@@ -28,21 +28,21 @@
         tabs: {}
       }
     },
-    mounted () {
+    mounted() {
       this.getPageHeaderInfo()
     },
-    updated () {
+    updated() {
       this.getPageHeaderInfo()
     },
     computed: {
 
-      getTitle () {
+      getTitle() {
         return this.$route.meta.title
       }
 
     },
     methods: {
-      getPageHeaderInfo () {
+      getPageHeaderInfo() {
         // eslint-disable-next-line
         this.title = this.$route.meta.title
         // 因为套用了一层 route-view 所以要取 ref 对象下的子节点的第一个对象
@@ -72,12 +72,12 @@
   }
 
   .mobile {
-    .extra-img{
+    .extra-img {
       margin-top: 0;
       text-align: center;
       width: 96px;
 
-      img{
+      img {
         width: 100%;
       }
     }

@@ -1,28 +1,26 @@
 <template>
-
-    <iframe  :id="id" :src="url" frameborder="0" width="100%" height="800px" scrolling="auto"></iframe>
-
+  <iframe :id="id" :src="url" frameborder="0" width="100%" height="800px" scrolling="auto"></iframe>
 </template>
 
 <script>
   import Vue from 'vue'
-  import { ACCESS_TOKEN } from "@/store/mutation-types"
+  import {ACCESS_TOKEN} from "@/store/mutation-types"
   import PageLayout from '../page/PageLayout'
   import RouteView from './RouteView'
 
   export default {
     name: "IframePageContent",
-    inject:['closeCurrent'],
-    data () {
+    inject: ['closeCurrent'],
+    data() {
       return {
         url: "",
-        id:""
+        id: ""
       }
     },
-    created () {
+    created() {
       this.goUrl()
     },
-    updated () {
+    updated() {
       this.goUrl()
     },
     watch: {
@@ -31,22 +29,22 @@
       }
     },
     methods: {
-      goUrl () {
+      goUrl() {
         let url = this.$route.meta.url
         let id = this.$route.path
         this.id = id
         //url = "http://www.baidu.com"
-        console.log("------url------"+url)
+        console.log("------url------" + url)
         if (url !== null && url !== undefined) {
           this.url = url;
           /*update_begin author:wuxianquan date:20190908 for:判断打开方式，新窗口打开时this.$route.meta.internalOrExternal==true */
-          if(this.$route.meta.internalOrExternal != undefined && this.$route.meta.internalOrExternal==true){
+          if (this.$route.meta.internalOrExternal != undefined && this.$route.meta.internalOrExternal == true) {
             this.closeCurrent();
             //外部url加入token
             let tokenStr = "${token}";
-            if(url.indexOf(tokenStr)!=-1){
+            if (url.indexOf(tokenStr) != -1) {
               let token = Vue.ls.get(ACCESS_TOKEN);
-               this.url = url.replace(tokenStr,token);
+              this.url = url.replace(tokenStr, token);
             }
             window.open(this.url);
           }

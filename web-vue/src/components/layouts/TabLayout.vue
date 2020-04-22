@@ -1,17 +1,16 @@
 <template>
   <global-layout @dynamicRouterShow="dynamicRouterShow">
     <contextmenu :itemList="menuItemList" :visible.sync="menuVisible" style="z-index: 9999;" @select="onMenuSelect"/>
-    <a-tabs
-      @contextmenu.native="e => onContextmenu(e)"
-      v-if="multipage"
-      :active-key="activePage"
-      class="tab-layout-tabs"
-      style="height:52px"
-      :hide-add="true"
-      type="editable-card"
-      @change="changePage"
-      @tabClick="tabCallBack"
-      @edit="editPage">
+    <a-tabs @contextmenu.native="e => onContextmenu(e)"
+            v-if="multipage"
+            :active-key="activePage"
+            class="tab-layout-tabs"
+            style="height:52px"
+            :hide-add="true"
+            type="editable-card"
+            @change="changePage"
+            @tabClick="tabCallBack"
+            @edit="editPage">
       <a-tab-pane :id="page.fullPath" :key="page.fullPath" v-for="page in pageList">
         <span slot="tab" :pagekey="page.fullPath">{{ page.meta.title }}</span>
       </a-tab-pane>
@@ -89,21 +88,15 @@
     },
     watch: {
       '$route': function (newRoute) {
-        //console.log("新的路由",newRoute)
         this.activePage = newRoute.fullPath
         if (!this.multipage) {
           this.linkList = [newRoute.fullPath]
           this.pageList = [Object.assign({}, newRoute)]
         } else if (indexKey == newRoute.fullPath) {
-          if (newRoute.meta.keepAlive === false) {
-            // this.routeReload()
-          }
+         
         } else if (this.linkList.indexOf(newRoute.fullPath) < 0) {
           this.linkList.push(newRoute.fullPath)
           this.pageList.push(Object.assign({}, newRoute))
-          if (newRoute.meta.keepAlive) {
-            // this.routeReload()
-          }
         } else if (this.linkList.indexOf(newRoute.fullPath) >= 0) {
           let oldIndex = this.linkList.indexOf(newRoute.fullPath)
           let oldPositionRoute = this.pageList[oldIndex]
@@ -145,7 +138,7 @@
         this.linkList.splice(0, 0, indexKey)
       },
       changeTitle(title) {
-        let projectTitle = "企业级快速开发平台"
+        let projectTitle = "快速开发平台"
         // 首页特殊处理
         if (this.$route.path === indexKey) {
           document.title = projectTitle

@@ -67,7 +67,8 @@
       <el-card>
         <!-- 查询区域 -->
         <div class="table-page-search-wrapper">
-          <el-input placeholder="请输入用户名称模糊查询" v-model="queryParam2.username" clearable @keyup.enter.native="searchQuery2"
+          <el-input placeholder="请输入用户名称模糊查询" v-model="queryParam2.username" clearable
+                    @keyup.enter.native="searchQuery2"
                     @clear="loadData" style="width: 180px" size="small"></el-input>
           <a-button type="primary" @click="searchQuery2" icon="search" style="margin-left: 21px">查询</a-button>
           <a-button type="primary" @click="searchReset2" icon="reload" style="margin-left: 8px">重置</a-button>
@@ -128,7 +129,7 @@
   import moment from 'moment'
 
   export default {
-    name: 'RoleUserList',
+    name: 'index',
     mixins: [ListMixin],
     components: {
       UserRoleModal,

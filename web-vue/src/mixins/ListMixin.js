@@ -57,8 +57,6 @@ export const ListMixin = {
   mounted() {
     if (!this.disableMixinCreated) {
       this.loadData();
-      //初始化字典配置 在自己页面定义
-      this.initDictConfig();
     }
   },
   methods: {
@@ -108,7 +106,6 @@ export const ListMixin = {
       obj.pageNo = this.ipagination.pageNo
       obj.pageSize = this.ipagination.pageSize;
       obj.queryParam = this.queryParam;
-      console.log(this.sort)
       obj.prop = this.sort.prop;
       obj.order = this.sort.order;
       postAction(this.url.list, obj).then((res) => {
@@ -125,9 +122,6 @@ export const ListMixin = {
         }
         this.loading = false;
       })
-    },
-    initDictConfig() {
-      console.log("--这是一个假的方法!")
     },
     handleSuperQuery(arg) {
       //高级查询方法

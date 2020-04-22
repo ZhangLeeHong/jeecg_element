@@ -112,7 +112,7 @@
   import JDate from '@/components/jeecg/JDate'
 
   export default {
-    name: "RoleList",
+    name: "index",
     mixins: [JeecgListMixin],
     components: {
       RoleModal,

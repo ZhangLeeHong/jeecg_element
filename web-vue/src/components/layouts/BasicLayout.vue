@@ -2,9 +2,9 @@
   <global-layout>
     <transition name="page-transition">
       <keep-alive v-if="keepAlive">
-        <router-view />
+        <router-view/>
       </keep-alive>
-      <router-view v-else />
+      <router-view v-else/>
     </transition>
   </global-layout>
 </template>
@@ -17,19 +17,15 @@
     components: {
       GlobalLayout
     },
-    data () {
-      return {
-
-      }
+    data() {
+      return {}
     },
     computed: {
-      keepAlive () {
+      keepAlive() {
         return this.$route.meta.keepAlive
       }
     },
-    methods: {
-
-    },
+    methods: {},
   }
 </script>
 

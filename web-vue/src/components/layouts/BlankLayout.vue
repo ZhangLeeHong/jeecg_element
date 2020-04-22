@@ -1,6 +1,6 @@
 <template>
   <div>
-    <router-view />
+    <router-view/>
   </div>
 </template>
 
@@ -10,7 +10,3 @@
     name: "BlankLayout",
   }
 </script>
-
-<style scoped>
-
-</style>

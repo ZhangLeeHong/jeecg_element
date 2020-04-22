@@ -106,10 +106,10 @@ public class SysUserController {
         return result;
     }
 
-    @RequestMapping(value = "/add", method = RequestMethod.POST)
+    @PostMapping(value = "/add")
     @RequiresPermissions("user:add")
     public Result<SysUser> add(@RequestBody JSONObject jsonObject) {
-        Result<SysUser> result = new Result<SysUser>();
+        Result<SysUser> result = new Result<>();
         String selectedRoles = jsonObject.getString("selectedroles");
         String selectedDeparts = jsonObject.getString("selecteddeparts");
         try {
