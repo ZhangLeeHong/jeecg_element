@@ -112,9 +112,6 @@ public class QueryGenerator {
         if (StringTools.isNullOrEmpty(keyStr) || filedList == null || filedList.length == 0) {
             return queryWrapper;
         }
-//        for (String field : filedList) {
-//            queryWrapper.like(field, keyStr).or();
-//        }
         for (int i = 1; i <= filedList.length; i++) {
             if (filedList.length != i) {
                 queryWrapper.like(filedList[i - 1], keyStr).or();

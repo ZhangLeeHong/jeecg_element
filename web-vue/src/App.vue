@@ -1,6 +1,7 @@
 <template>
   <a-locale-provider :locale="locale">
     <div id="app">
+      <link rel="stylesheet" href="//at.alicdn.com/t/font_1379292_tjsltcdhkho.css">
       <router-view/>
     </div>
   </a-locale-provider>

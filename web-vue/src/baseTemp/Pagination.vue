@@ -1,14 +1,12 @@
 <template>
-  <el-pagination
-    :pager-count="5"
-    @size-change="pageSizeChange"
-    @current-change="pageNumberChange"
-    :current-page.sync="page.current"
-    :page-size.sync="page.pageSize"
-    :page-sizes.sync="pageSizes!=null?pageSizes:page_sizes"
-    :layout.sync="layout"
-    :total.sync="page.total">
-  </el-pagination>
+  <el-pagination :pager-count="5"
+                 @size-change="pageSizeChange"
+                 @current-change="pageNumberChange"
+                 :current-page.sync="page.current"
+                 :page-size.sync="page.pageSize"
+                 :page-sizes.sync="pageSizes!=null?pageSizes:page_sizes"
+                 :layout.sync="layout"
+                 :total.sync="page.total"/>
 </template>
 
 <script>

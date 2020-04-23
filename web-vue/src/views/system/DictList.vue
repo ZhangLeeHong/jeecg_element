@@ -22,7 +22,7 @@
       <div class="mainArea">
         <el-table v-loading="loading" :data="dataSource" ref="table" border
                   :default-sort="sort={prop: 'create_time', order: 'descending'}"
-                  @sort-change="sortChange" :height="getHeight(340)"
+                  @sort-change="sortChange" :height="getHeight(338)"
                   @selection-change="selectionChange" @row-dblclick="rowDblClick">
           <el-table-column type="index" align="center" width="60"/>
           <el-table-column prop="dictName" label="字典名称" width="160"/>

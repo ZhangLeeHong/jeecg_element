@@ -24,7 +24,7 @@
 
     <!-- 操作按钮区域 -->
     <div class="table-operator" style="border-top: 5px">
-      <a-button @click="handleAdd" type="primary" icon="plus">添加用户</a-button>
+      <a-button @click="handleAdd" type="primary" icon="plus" v-has="'user:add'">添加用户</a-button>
       <a-button @click="handleSyncUser" v-has="'user:syncbpm'" type="primary" icon="plus">同步流程</a-button>
       <a-button type="primary" icon="download" @click="handleExportXls('用户信息')">导出</a-button>
       <a-upload name="file" :showUploadList="false" :multiple="false" :headers="tokenHeader" :action="importExcelUrl"
@@ -181,7 +181,6 @@
             dataIndex: 'avatar',
             scopedSlots: {customRender: "avatarslot"}
           },
-
           {
             title: '性别',
             align: "center",

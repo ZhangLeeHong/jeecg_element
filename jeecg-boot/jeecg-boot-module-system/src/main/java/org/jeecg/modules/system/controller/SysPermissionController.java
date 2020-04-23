@@ -55,15 +55,13 @@ public class SysPermissionController {
 
     /**
      * 加载数据节点
-     *
-     * @return
      */
-    @RequestMapping(value = "/list", method = RequestMethod.GET)
+    @PostMapping("/list")
     public Result<List<SysPermissionTree>> list() {
         long start = System.currentTimeMillis();
         Result<List<SysPermissionTree>> result = new Result<>();
         try {
-            LambdaQueryWrapper<SysPermission> query = new LambdaQueryWrapper<SysPermission>();
+            LambdaQueryWrapper<SysPermission> query = new LambdaQueryWrapper<>();
             query.eq(SysPermission::getDelFlag, CommonConstant.DEL_FLAG_0);
             query.orderByAsc(SysPermission::getSortNo);
             List<SysPermission> list = sysPermissionService.list(query);
@@ -78,12 +76,8 @@ public class SysPermissionController {
         return result;
     }
 
-    /*update_begin author:wuxianquan date:20190908 for:先查询一级菜单，当用户点击展开菜单时加载子菜单 */
-
     /**
      * 系统菜单列表(一级菜单)
-     *
-     * @return
      */
     @RequestMapping(value = "/getSystemMenuList", method = RequestMethod.GET)
     public Result<List<SysPermissionTree>> getSystemMenuList() {
@@ -199,26 +193,22 @@ public class SysPermissionController {
 
     /**
      * 查询用户拥有的菜单权限和按钮权限（根据TOKEN）
-     *
-     * @return
      */
-    @RequestMapping(value = "/getUserPermissionByToken", method = RequestMethod.GET)
-    public Result<?> getUserPermissionByToken(@RequestParam(name = "token", required = true) String token) {
-        Result<JSONObject> result = new Result<JSONObject>();
+    @PostMapping("/getUserPermissionByToken")
+    public Result<?> getUserPermissionByToken(@RequestBody JSONObject jsonObject) {
+        Result<JSONObject> result = new Result<>();
         try {
-            if (oConvertUtils.isEmpty(token)) {
+            if (oConvertUtils.isEmpty(jsonObject.get("token"))) {
                 return Result.error("TOKEN不允许为空！");
             }
-            log.info(" ------ 通过令牌获取用户拥有的访问菜单 ---- TOKEN ------ " + token);
-            String username = JwtUtil.getUsername(token);
+            log.info(" ------ 通过令牌获取用户拥有的访问菜单 ---- TOKEN ------ " + jsonObject.get("token"));
+            String username = JwtUtil.getUsername(jsonObject.getString("token"));
             List<SysPermission> metaList = sysPermissionService.queryByUser(username);
             //添加首页路由
-            //update-begin-author:taoyan date:20200211 for: TASK #3368 【路由缓存】首页的缓存设置有问题，需要根据后台的路由配置来实现是否缓存
             if (!PermissionDataUtil.hasIndexPage(metaList)) {
                 SysPermission indexMenu = sysPermissionService.list(new LambdaQueryWrapper<SysPermission>().eq(SysPermission::getName, "首页")).get(0);
                 metaList.add(0, indexMenu);
             }
-            //update-end-author:taoyan date:20200211 for: TASK #3368 【路由缓存】首页的缓存设置有问题，需要根据后台的路由配置来实现是否缓存
             JSONObject json = new JSONObject();
             JSONArray menujsonArray = new JSONArray();
             this.getPermissionJsonArray(menujsonArray, metaList, null);
@@ -249,9 +239,6 @@ public class SysPermissionController {
 
     /**
      * 添加菜单
-     *
-     * @param permission
-     * @return
      */
     @RequiresRoles({"admin"})
     @RequestMapping(value = "/add", method = RequestMethod.POST)
@@ -715,7 +702,7 @@ public class SysPermissionController {
 
     @RequestMapping(value = "/editPermissionRule", method = {RequestMethod.PUT, RequestMethod.POST})
     public Result<SysPermissionDataRule> editPermissionRule(@RequestBody SysPermissionDataRule sysPermissionDataRule) {
-        Result<SysPermissionDataRule> result = new Result<SysPermissionDataRule>();
+        Result<SysPermissionDataRule> result = new Result<>();
         try {
             sysPermissionDataRuleService.saveOrUpdate(sysPermissionDataRule);
             result.success("更新成功！");
@@ -728,9 +715,6 @@ public class SysPermissionController {
 
     /**
      * 删除菜单权限数据
-     *
-     * @param sysPermissionDataRule
-     * @return
      */
     @RequestMapping(value = "/deletePermissionRule", method = RequestMethod.DELETE)
     public Result<SysPermissionDataRule> deletePermissionRule(@RequestParam(name = "id", required = true) String id) {

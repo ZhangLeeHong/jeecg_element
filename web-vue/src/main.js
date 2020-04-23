@@ -1,6 +1,7 @@
 import 'ant-design-vue/dist/antd.less';  // or 'ant-design-vue/dist/antd.less'
 import 'vue-photo-preview/dist/skin.css'
 import 'element-ui/lib/theme-chalk/index.css';
+
 require('@jeecg/antd-online-214')
 require('@jeecg/antd-online-214/dist/OnlineForm.css')
 import "./assets/css/main.css";

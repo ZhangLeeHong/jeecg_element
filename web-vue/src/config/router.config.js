@@ -2,7 +2,6 @@ import {UserLayout, TabLayout, RouteView, BlankLayout, PageView} from '@/compone
 
 /**
  * 走菜单，走权限控制
- * @type {[null,null]}
  */
 export const asyncRouterMap = [
 

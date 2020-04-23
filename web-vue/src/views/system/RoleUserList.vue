@@ -6,7 +6,7 @@
         <div class="table-page-search-wrapper">
           <!-- 搜索区域 -->
           <el-input placeholder="请输入角色名称模糊查询" v-model="queryParam.keyStr" clearable @keyup.enter.native="loadData"
-                    @clear="loadData" style="width: 280px" size="small"></el-input>
+                    @clear="loadData" style="width: 190px" size="small"></el-input>
           <a-button type="primary" @click="loadData" icon="search" style="margin-left: 21px">查询</a-button>
           <a-button type="primary" @click="searchReset" icon="reload" style="margin-left: 8px">重置</a-button>
         </div>
@@ -69,7 +69,7 @@
         <div class="table-page-search-wrapper">
           <el-input placeholder="请输入用户名称模糊查询" v-model="queryParam2.username" clearable
                     @keyup.enter.native="searchQuery2"
-                    @clear="loadData" style="width: 180px" size="small"></el-input>
+                    @clear="loadData" style="width: 190px" size="small"></el-input>
           <a-button type="primary" @click="searchQuery2" icon="search" style="margin-left: 21px">查询</a-button>
           <a-button type="primary" @click="searchReset2" icon="reload" style="margin-left: 8px">重置</a-button>
         </div>
