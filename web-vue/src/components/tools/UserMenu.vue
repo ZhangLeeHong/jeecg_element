@@ -185,7 +185,7 @@
       ...mapActions(["Logout"]),
       ...mapGetters(["nickname", "avatar", "userInfo"]),
       getAvatar() {
-        console.log('url = ' + window._CONFIG['staticDomainURL'] + "/" + this.avatar())
+        // console.log('url = ' + window._CONFIG['staticDomainURL'] + "/" + this.avatar())
         return window._CONFIG['staticDomainURL'] + "/" + this.avatar()
       },
       handleLogout() {

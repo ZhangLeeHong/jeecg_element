@@ -70,7 +70,7 @@
         </el-table-column>
         <el-table-column prop="phone" label="手机号码" width="140" align="center"/>
         <el-table-column prop="orgCode" label="部门" width="140" align="center"/>
-        <el-table-column prop="createTime" label="创建时间" width="140" align="center" sortable>
+        <el-table-column prop="create_time" label="创建时间" width="140" align="center" sortable>
           <template slot-scope="scope">
             <span>{{ scope.row.createTime | moment('YYYY-MM-DD HH:mm') }}</span>
           </template>
@@ -94,7 +94,7 @@
                   <a href="javascript:;" @click="handleChangePassword(scope.row.username)">密码</a>
                 </a-menu-item>
 
-                <a-menu-item>
+                <a-menu-item v-has="'user:delete'">
                   <a-popconfirm title="确定删除吗?" @confirm="() => handleDelete(scope.row.id)">
                     <a>删除</a>
                   </a-popconfirm>

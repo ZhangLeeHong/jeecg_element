@@ -28,7 +28,7 @@
           <el-table-column prop="dictName" label="字典名称" width="160"/>
           <el-table-column prop="dictCode" label="字典编号" width="160"/>
           <el-table-column prop="description" label="描述" width="160" show-overflow-tooltip/>
-          <el-table-column prop="createTime" label="创建时间" width="140" align="center" sortable>
+          <el-table-column prop="create_time" label="创建时间" width="140" align="center" sortable>
             <template slot-scope="scope">
               <span>{{ scope.row.createTime | moment('YYYY-MM-DD HH:mm') }}</span>
             </template>

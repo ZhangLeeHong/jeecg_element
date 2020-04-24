@@ -54,7 +54,7 @@
         <el-table-column prop="ip" label="IP" width="140" align="center"/>
         <el-table-column prop="costTime" label="耗时(毫秒)" width="140" align="center"/>
         <el-table-column prop="logType_dictText" label="日志类型" width="120" align="center"/>
-        <el-table-column prop="createTime" label="创建时间" width="140" align="center" sortable>
+        <el-table-column prop="create_time" label="创建时间" width="140" align="center" sortable>
           <template slot-scope="scope">
             <span>{{ scope.row.createTime | moment('YYYY-MM-DD HH:mm') }}</span>
           </template>

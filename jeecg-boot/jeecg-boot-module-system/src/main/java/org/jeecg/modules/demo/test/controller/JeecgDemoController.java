@@ -69,7 +69,7 @@ public class JeecgDemoController extends JeecgController<JeecgDemo, IJeecgDemoSe
      */
     @ApiOperation(value = "获取Demo数据列表", notes = "获取所有Demo数据列表")
     @GetMapping(value = "/list")
-    @PermissionData(pageComponent = "jeecg/JeecgDemoList")
+    @PermissionData(pageComponent = "temp/JeecgDemoList")
     public Result<?> list(JeecgDemo jeecgDemo, @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo, @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize,
                           HttpServletRequest req) {
         QueryWrapper<JeecgDemo> queryWrapper = QueryGenerator.initQueryWrapper(jeecgDemo, req.getParameterMap());
@@ -157,7 +157,7 @@ public class JeecgDemoController extends JeecgController<JeecgDemo, IJeecgDemoSe
      * @param request
      */
     @RequestMapping(value = "/exportXls")
-    @PermissionData(pageComponent = "jeecg/JeecgDemoList")
+    @PermissionData(pageComponent = "temp/JeecgDemoList")
     public ModelAndView exportXls(HttpServletRequest request, JeecgDemo jeecgDemo) {
         return super.exportXls(request, jeecgDemo, JeecgDemo.class, "单表模型");
     }
@@ -263,7 +263,7 @@ public class JeecgDemoController extends JeecgController<JeecgDemo, IJeecgDemoSe
      * @return
      */
     @GetMapping(value = "/mpList")
-    @PermissionData(pageComponent = "jeecg/JeecgDemoList")
+    @PermissionData(pageComponent = "temp/JeecgDemoList")
     public Result<?> loadMpPermissonList(@RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo, @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize,
                                          HttpServletRequest req) {
         QueryWrapper<JeecgDemo> queryWrapper = new QueryWrapper<JeecgDemo>();
@@ -284,7 +284,7 @@ public class JeecgDemoController extends JeecgController<JeecgDemo, IJeecgDemoSe
      * @return
      */
     @GetMapping(value = "/sqlList")
-    @PermissionData(pageComponent = "jeecg/JeecgDemoList")
+    @PermissionData(pageComponent = "temp/JeecgDemoList")
     public Result<?> loadSqlPermissonList(JeecgDemo jeecgDemo, @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo, @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize,
                                           HttpServletRequest req) {
         IPage<JeecgDemo> pageList = jeecgDemoService.queryListWithPermission(pageSize, pageNo);

@@ -210,24 +210,24 @@ public class SysPermissionController {
                 metaList.add(0, indexMenu);
             }
             JSONObject json = new JSONObject();
-            JSONArray menujsonArray = new JSONArray();
-            this.getPermissionJsonArray(menujsonArray, metaList, null);
-            JSONArray authjsonArray = new JSONArray();
-            this.getAuthJsonArray(authjsonArray, metaList);
+            JSONArray menuJsonArray = new JSONArray();
+            this.getPermissionJsonArray(menuJsonArray, metaList, null);
+            JSONArray authJsonArray = new JSONArray();
+            this.getAuthJsonArray(authJsonArray, metaList);
             //查询所有的权限
-            LambdaQueryWrapper<SysPermission> query = new LambdaQueryWrapper<SysPermission>();
+            LambdaQueryWrapper<SysPermission> query = new LambdaQueryWrapper<>();
             query.eq(SysPermission::getDelFlag, CommonConstant.DEL_FLAG_0);
             query.eq(SysPermission::getMenuType, CommonConstant.MENU_TYPE_2);
             //query.eq(SysPermission::getStatus, "1");
             List<SysPermission> allAuthList = sysPermissionService.list(query);
-            JSONArray allauthjsonArray = new JSONArray();
-            this.getAllAuthJsonArray(allauthjsonArray, allAuthList);
+            JSONArray allAuthJsonArray = new JSONArray();
+            this.getAllAuthJsonArray(allAuthJsonArray, allAuthList);
             //路由菜单
-            json.put("menu", menujsonArray);
+            json.put("menu", menuJsonArray);
             //按钮权限
-            json.put("auth", authjsonArray);
+            json.put("auth", authJsonArray);
             //全部权限配置（按钮权限，访问权限）
-            json.put("allAuth", allauthjsonArray);
+            json.put("allAuth", allAuthJsonArray);
             result.setResult(json);
             result.success("查询成功");
         } catch (Exception e) {

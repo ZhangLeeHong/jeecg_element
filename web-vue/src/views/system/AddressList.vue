@@ -15,7 +15,7 @@
 
   export default {
     name: 'AddressList',
-    components: { AddressListLeft, AddressListRight },
+    components: {AddressListLeft, AddressListRight},
     data() {
       return {
         description: '通讯录页面',

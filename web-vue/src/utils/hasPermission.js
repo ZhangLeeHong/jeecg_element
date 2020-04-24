@@ -2,7 +2,6 @@ import {USER_AUTH, SYS_BUTTON_AUTH} from "@/store/mutation-types"
 
 const hasPermission = {
   install(Vue, options) {
-    //console.log(options);
     Vue.directive('has', {
       inserted: (el, binding, vnode) => {
         //console.log("页面权限控制----");
@@ -41,7 +40,6 @@ export function filterNodePermission(el, binding, vnode) {
     //el.parentNode.removeChild(el)
     return false;
   }
-
   console.log("流程节点页面权限--NODE--");
   let permissions = [];
   for (let item of permissionList) {

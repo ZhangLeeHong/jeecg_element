@@ -163,7 +163,6 @@
         })
         getVisitInfo().then(res => {
           if (res.success) {
-            console.log("aaaaaa", res.result)
             this.visitInfo = res.result;
           }
         })

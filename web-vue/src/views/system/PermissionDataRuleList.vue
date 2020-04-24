@@ -119,7 +119,7 @@
     methods: {
       loadData() {
         //20190908 scott for: 首次进入菜单列表的时候，不加载权限列表
-        if(!this.permId){
+        if (!this.permId) {
           return
         }
         let that = this
@@ -172,8 +172,8 @@
           this.drawerWidth = 650
         }
       },
-      getRowClassname(record){
-        if(record.status!=1){
+      getRowClassname(record) {
+        if (record.status != 1) {
           return "data-rule-invalid"
         }
       }
@@ -182,7 +182,7 @@
 </script>
 
 <style>
-  .data-rule-invalid{
+  .data-rule-invalid {
     background: #f4f4f4;
     color: #bababa;
   }

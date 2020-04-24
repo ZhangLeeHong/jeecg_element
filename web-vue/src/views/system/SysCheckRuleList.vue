@@ -37,7 +37,8 @@
     <div class="table-operator">
       <a-button @click="handleAdd" type="primary" icon="plus">新增</a-button>
       <a-button type="primary" icon="download" @click="handleExportXls('编码校验规则')">导出</a-button>
-      <a-upload name="file" :showUploadList="false" :multiple="false" :headers="tokenHeader" :action="importExcelUrl" @change="handleImportExcel">
+      <a-upload name="file" :showUploadList="false" :multiple="false" :headers="tokenHeader" :action="importExcelUrl"
+                @change="handleImportExcel">
         <a-button type="primary" icon="import">导入</a-button>
       </a-upload>
       <a-dropdown v-if="selectedRowKeys.length > 0">
@@ -109,14 +110,14 @@
 
 <script>
   import JEllipsis from '@/components/jeecg/JEllipsis'
-  import { JeecgListMixin } from '@/mixins/JeecgListMixin'
+  import {JeecgListMixin} from '@/mixins/JeecgListMixin'
   import SysCheckRuleModal from './modules/SysCheckRuleModal'
   import SysCheckRuleTestModal from './modules/SysCheckRuleTestModal'
 
   export default {
     name: 'SysCheckRuleList',
     mixins: [JeecgListMixin],
-    components: { SysCheckRuleModal, SysCheckRuleTestModal, JEllipsis },
+    components: {SysCheckRuleModal, SysCheckRuleTestModal, JEllipsis},
     data() {
       return {
         description: '编码校验规则管理页面',
@@ -149,7 +150,7 @@
             title: '操作',
             dataIndex: 'action',
             align: 'center',
-            scopedSlots: { customRender: 'action' },
+            scopedSlots: {customRender: 'action'},
           }
         ],
         url: {

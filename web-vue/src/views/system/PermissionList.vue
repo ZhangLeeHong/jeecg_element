@@ -31,7 +31,7 @@
             </a>
           </template>
         </el-table-column>
-        <el-table-column prop="status" label="状态" width="60">
+        <el-table-column prop="status" label="状态" width="60" align="center">
           <template slot-scope="o" v-if="o.row.status != null">
             <span :style="{color: o.row.status == 0 ? 'red' : 'green'}">{{ o.row.status == 0 ? '停用' : '正常' }}</span>
           </template>

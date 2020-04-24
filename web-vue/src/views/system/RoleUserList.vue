@@ -27,7 +27,7 @@
             <el-table-column type="index" align="center" width="60"/>
             <el-table-column prop="roleName" label="角色名称" width="140"/>
             <el-table-column prop="roleCode" label="角色编码" width="140"/>
-            <el-table-column prop="createTime" label="创建时间" width="140" align="center" sortable>
+            <el-table-column prop="create_time" label="创建时间" width="140" align="center" sortable>
               <template slot-scope="scope">
                 <span>{{ scope.row.createTime | moment('YYYY-MM-DD HH:mm') }}</span>
               </template>
@@ -97,7 +97,7 @@
             <el-table-column type="index" align="center" width="60"/>
             <el-table-column prop="username" label="用户账号" width="140"/>
             <el-table-column prop="realname" label="用户姓名" width="140"/>
-            <el-table-column prop="createTime" label="创建时间" width="140" align="center" sortable>
+            <el-table-column prop="create_time" label="创建时间" width="140" align="center" sortable>
               <template slot-scope="scope">
                 <span>{{ scope.row.createTime | moment('YYYY-MM-DD HH:mm') }}</span>
               </template>
